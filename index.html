@@ -24,19 +24,25 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- 登录遮罩层 -->
+    <!-- 身份绑定/登录遮罩层 -->
     <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 backdrop-blur-2xl">
         <div class="glass-card bg-white p-10 rounded-[2.5rem] max-w-sm w-full text-center shadow-2xl">
             <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
             </div>
-            <h2 class="text-xl font-semibold mb-2 text-slate-800">身份激活</h2>
-            <p class="text-[10px] text-slate-400 mb-8 tracking-[0.2em] uppercase">请输入您的代号以开启审计</p>
-            <input type="text" id="user-nickname" placeholder="微信昵称 / 玩家代号" 
-                   class="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 mb-4 focus:outline-none focus:ring-2 focus:ring-black transition-all text-center">
+            <h2 class="text-xl font-semibold mb-2 text-slate-800">档案绑定</h2>
+            <p class="text-[10px] text-slate-400 mb-8 tracking-[0.2em] uppercase">请输入手机号以激活神经元档案</p>
+            
+            <!-- 修改为手机号输入 -->
+            <input type="tel" id="user-phone" maxlength="11" placeholder="请输入11位手机号码" 
+                   class="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 mb-4 focus:outline-none focus:ring-2 focus:ring-black transition-all text-center text-lg tracking-wider">
+            
             <button onclick="activateSystem()" class="w-full bg-black text-white py-4 rounded-full font-medium hover:bg-slate-800 transition-all shadow-lg">
-                进入审计系统
+                同步数据并开始审计
             </button>
+            <p class="mt-6 text-[10px] text-slate-300 italic">“精准的物理 ID 是重塑心智的第一步”</p>
         </div>
     </div>
 
@@ -44,25 +50,26 @@
         <div id="quiz-ui" class="hidden">
             <div class="mb-12 text-center">
                 <h1 class="text-2xl font-semibold tracking-tighter italic text-slate-800">心智审计 · MIND AUDIT</h1>
-                <p id="user-display" class="text-[10px] text-slate-400 mt-1 tracking-[0.3em] uppercase">初始化中...</p>
+                <p id="user-display" class="text-[10px] text-slate-400 mt-1 tracking-[0.3em] uppercase">档案加载中...</p>
                 <div class="mt-6 flex justify-center space-x-3" id="dots-container"></div>
             </div>
 
             <div id="question-box" class="glass-card rounded-3xl p-8 md:p-12 min-h-[420px] flex flex-col justify-center">
                 <div id="q-container" class="fade-in">
                     <span id="q-tag" class="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-4 block font-mono">测算模块 01</span>
-                    <h2 id="q-title" class="text-xl md:text-2xl font-medium leading-snug mb-10 text-slate-900">正在接入...</h2>
+                    <h2 id="q-title" class="text-xl md:text-2xl font-medium leading-snug mb-10 text-slate-900">系统就绪...</h2>
                     <div id="options-space" class="space-y-3"></div>
                 </div>
             </div>
 
             <div class="mt-10 flex justify-between items-center text-sm">
-                <button id="prev-btn" onclick="prevStep()" class="text-slate-400 hover:text-black transition-all font-medium flex items-center">← 上一题</button>
+                <button id="prev-btn" onclick="prevStep()" class="text-slate-400 hover:text-black transition-all font-medium flex items-center disabled:opacity-0">← 上一题</button>
                 <span id="progress-num" class="font-mono text-xs text-slate-300">01 / 10</span>
                 <button id="next-btn" onclick="nextStep()" class="text-slate-400 hover:text-black transition-all font-medium flex items-center">下一题 →</button>
             </div>
         </div>
 
+        <!-- 结果展示及后续逻辑保持不变 -->
         <div id="loading-ui" class="hidden text-center py-20">
             <div class="relative w-24 h-24 mx-auto mb-8 animate-pulse">
                 <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
@@ -92,7 +99,7 @@
     </div>
 
     <script>
-        let globalUserName = "";
+        let globalUserPhone = "";
         let currentIdx = 0;
         const questions = [
             { t: "面对未来的不确定性，你通常的后台反应是？", o: [{ s: 1, t: "反复推演最坏结果，试图通过大脑‘剧透’未来" }, { s: 2, t: "感到焦虑，但知道想也没用，被迫走一步看一步" }, { s: 3, t: "承认世界计算不可约，专注捕捉当下的行动信号" }] },
@@ -108,28 +115,38 @@
         ];
         let answers = new Array(questions.length).fill(null);
 
+        // 缓存检测
         window.onload = () => {
-            const cachedName = localStorage.getItem('mind_audit_user');
-            if (cachedName) {
-                globalUserName = cachedName;
+            const cachedPhone = localStorage.getItem('mind_audit_phone');
+            if (cachedPhone) {
+                globalUserPhone = cachedPhone;
                 document.getElementById('login-overlay').classList.add('hidden');
                 document.getElementById('quiz-ui').classList.remove('hidden');
-                document.getElementById('user-display').innerText = `欢迎回来：${globalUserName}`;
+                document.getElementById('user-display').innerText = `已绑定档案：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
                 renderQuestion();
             }
         };
 
+        // 手机号验证并激活
         function activateSystem() {
-            const name = document.getElementById('user-nickname').value;
-            if (!name || name.trim() === "") { alert("请先输入您的代号以激活系统"); return; }
-            globalUserName = name;
-            localStorage.setItem('mind_audit_user', name);
+            const phone = document.getElementById('user-phone').value;
+            // 手机号正则表达式：1开头，第二位3-9，后面9位数字
+            const phoneRegex = /^1[3-9]\d{9}$/;
+            
+            if (!phoneRegex.test(phone)) {
+                alert("请输入正确的11位手机号码，以便精确匹配您的神经元档案。");
+                return;
+            }
+            
+            globalUserPhone = phone;
+            localStorage.setItem('mind_audit_phone', phone);
             document.getElementById('login-overlay').classList.add('hidden');
             document.getElementById('quiz-ui').classList.remove('hidden');
-            document.getElementById('user-display').innerText = `已激活：${globalUserName}`;
+            document.getElementById('user-display').innerText = `档案已激活：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
             renderQuestion();
         }
 
+        // --- 其余逻辑保持不变 ---
         const dotsContainer = document.getElementById('dots-container');
         for(let i=0; i<questions.length; i++) {
             const dot = document.createElement('div');
@@ -158,7 +175,7 @@
                 space.appendChild(btn);
             });
             const nextBtn = document.getElementById('next-btn');
-            if(currentIdx === 9) { nextBtn.innerHTML = `提交审计报告 ✨`; nextBtn.onclick = () => finishAudit(); } 
+            if(currentIdx === 9) { nextBtn.innerHTML = `生成审计报告 ✨`; nextBtn.onclick = () => finishAudit(); } 
             else { nextBtn.innerHTML = `下一题 →`; nextBtn.onclick = () => nextStep(); }
             updateNavigation();
         }
@@ -178,7 +195,7 @@
         function prevStep() { if(currentIdx > 0) { currentIdx--; renderQuestion(); } }
 
         function finishAudit() {
-            if(answers.includes(null)) { alert("请完成所有审计题目"); return; }
+            if(answers.includes(null)) { alert("请完成所有模块审计"); return; }
             document.getElementById('quiz-ui').classList.add('hidden');
             document.getElementById('loading-ui').classList.remove('hidden');
             setTimeout(showResult, 2500);
@@ -191,6 +208,7 @@
             let start = 0;
             const timer = setInterval(() => { if (start >= score) { clearInterval(timer); document.getElementById('final-score').innerText = score; } else { start++; document.getElementById('final-score').innerText = start; } }, 40);
 
+            // 结果分段逻辑（保持你要求的精细化等级）
             let res = {};
             if(score <= 13) {
                 res = { tag: "系统全面熔断：神经肽重度成瘾", bg: "bg-red-500 text-white", diag: "你的身体正处于危险的“自虐”循环中。由于长期处于压抑环境，细胞对痛苦产生的“神经肽”形成重度生理成瘾。你的潜意识会“自动捕获”痛苦，甚至在平静时主动制造事端获取难受感。剧本正被潜意识完全操控。", solve: "停止讲道理，执行硬件重启！崩溃时先执行‘止损三问’（缺水/缺觉/太冷吗？）。补充电解质，并强制使用‘两吸一呼’法激活迷走神经降心率。" };
@@ -216,11 +234,12 @@
         }
 
         async function pushToFeishu(score, tag) {
+            // 这里替换成你的 Pipedream 或机器人 Webhook 地址
             const botWebhook = "https://open.feishu.cn/open-apis/bot/v2/hook/4aad4c7e-08ff-473f-9ae9-70b4a179b10c"; 
             const msg = {
                 "msgtype": "markdown",
                 "content": {
-                    "text": `### 🛡️ 系统审计预警\n**玩家代号**：${globalUserName}\n**审计得分**：${score} 分\n**判定结果**：${tag}\n**上报时间**：${new Date().toLocaleString()}\n---\n> _“发现新样本，请主理人立即介入。”_`
+                    "text": `### 🛡️ 系统审计预警\n**玩家手机**：${globalUserPhone}\n**审计得分**：${score} 分\n**判定结果**：${tag}\n**上报时间**：${new Date().toLocaleString()}\n---\n> _“检测到新神经元样本，建议主理人根据号码执行 1v1 精准链接。”_`
                 }
             };
             fetch(botWebhook, {
