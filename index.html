@@ -299,7 +299,7 @@
             document.getElementById('diag-text').innerText = res.diag;
             document.getElementById('solve-text').innerText = res.solve;
             
-            pushToFeishu(score, res.tag);
+			pushToFeishu(score, res.tag,res.diag,res.solve);
         }
 
         async function pushToFeishu(score, tag) {
