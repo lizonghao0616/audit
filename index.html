@@ -269,21 +269,26 @@
 
 		// 【核心修复点 2】：函数定义接收 4 个参数
 		async function pushToFeishu(score, tag, diag, solve) {
-			const botWebhook = "https://eourpinh6l190e0.m.pipedream.net";
-			
-			const payload = {
-				"phone": globalUserPhone,
-				"score": score,
-				"tag": tag,
-				"diag": diag, // 现在 diag 有值了
-				"solve": solve // 现在 solve 有值了
-			};
-			
-			fetch(botWebhook, {
-				method: 'POST',
-				mode: 'no-cors',
-				body: JSON.stringify(payload)
-			});
+		    const bridgeUrl = "https://eourpinh6l190e0.m.pipedream.net";
+		    
+		    const payload = {
+		        "phone": globalUserPhone,
+		        "score": score,
+		        "tag": tag,
+		        "diag": diag,
+		        "solve": solve
+		    };
+		    
+		    // 移除 mode: 'no-cors'，改用标准 fetch
+		    fetch(bridgeUrl, {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json' // 正式域名下必须显式声明
+		        },
+		        body: JSON.stringify(payload)
+		    })
+		    .then(response => console.log("数据同步状态:", response.status))
+		    .catch(error => console.error("同步失败，请检查网络或拦截插件:", error));
 		}
 	</script>
 </body>
