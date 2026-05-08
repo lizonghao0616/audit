@@ -99,227 +99,192 @@
     </div>
 
     <script>
-        let globalUserPhone = "";
-        let currentIdx = 0;
-        const questions = [
-            { t: "1. 面对未来的不确定性，您通常的心理反应是？", o: [
-                { s: 1, t: "反复推演最坏的可能，试图提前掌控所有细节，常感到忧虑" },
-                { s: 2, t: "虽然知道多想无益，但仍会感到焦虑，处于被动等待的状态" },
-                { s: 3, t: "接纳不可控的部分，将注意力集中在当下的实际行动上" }
-            ]},
-            { t: "2. 在处理重要任务时，您的专注力表现如何？", o: [
-                { s: 3, t: "定力极强，能迅速进入深度投入状态，不受外界干扰" },
-                { s: 2, t: "进入状态较慢，容易被手机消息或环境噪音分散注意力" },
-                { s: 1, t: "难以集中精神，脑海中杂念较多，经常感到心神不宁" }
-            ]},
-            { t: "3. 对于日常生活和工作的琐事，您习惯如何记录和管理？", o: [
-                { s: 3, t: "善用外部工具（如清单、便签）记录，释放大脑压力，专注决策" },
-                { s: 2, t: "偶尔记录，但大部分信息仍依赖记忆，偶尔会感到吃力或遗忘" },
-                { s: 1, t: "完全凭借记忆，经常感到大脑超负荷，事情一多就容易混乱" }
-            ]},
-            { t: "4. 当生活中反复出现同样的难题（如人际冲突），您的处理思路是？", o: [
-                { s: 1, t: "认为是个人的运气不好，或者认为责任全在对方，感到无奈" },
-                { s: 2, t: "尝试用一些通用的技巧去缓解症状，但不愿深究背后的原因" },
-                { s: 3, t: "审视自己的行为模式，试图寻找问题的根源并从根本上改变" }
-            ]},
-            { t: "5. 当遭遇意外或他人的指责时，您的生理和情绪反应是？", o: [
-                { s: 1, t: "情绪迅速失控，身体反应强烈（如心跳加速），难以保持理智" },
-                { s: 2, t: "表面保持克制，但内心产生严重的负面情绪，需要很长时间排解" },
-                { s: 3, t: "能够迅速跳出情绪，以客观的视角看待问题，保持内心平稳" }
-            ]},
-            { t: "6. 关于“知行合一”，您认为自己目前的真实状态是？", o: [
-                { s: 2, t: "懂得很多理论知识，但在实际行动时往往还是按照旧习惯行事" },
-                { s: 1, t: "遇到问题时，理智往往会被情绪盖过，无法运用所学的知识" },
-                { s: 3, t: "已经将所学的知识转化为习惯，能够自然地落实到行动中" }
-            ]},
-            { t: "7. 当您感到身心疲惫、压力过大时，通常如何调节？", o: [
-                { s: 3, t: "通过深呼吸、整理环境等物理方式，主动调节身体和空间状态" },
-                { s: 1, t: "通过刷手机、进食等方式转移注意力，但事后感到更加疲惫" },
-                { s: 2, t: "试图通过讲道理说服自己冷静，但往往发现收效甚微" }
-            ]},
-            { t: "8. 在做重大决定时，您更倾向于听从哪部分的声音？", o: [
-                { s: 2, t: "过度依赖理智和逻辑分析，即使内心感到憋屈或抵触也会硬撑" },
-                { s: 1, t: "完全受当下的心情和冲动驱动，事后往往会感到后悔" },
-                { s: 3, t: "内心直觉与理智逻辑达成统一，能够平和且坚定地做出选择" }
-            ]},
-            { t: "9. 面对完全无法掌控的外部大环境，您的态度通常是？", o: [
-                { s: 3, t: "明确自己的边界，只关注自己能改变的事，在微观处建立秩序" },
-                { s: 1, t: "感到愤慨或不平，长期沉溺于抱怨环境，丧失了行动的动力" },
-                { s: 2, t: "表面上装作不在乎，但内心非常迷茫，容易受外界噪音影响" }
-            ]},
-            { t: "10. 您认为真正的“智慧”主要体现在什么地方？", o: [
-                { s: 1, t: "体现在掌握的理论、知识和道理的深度上" },
-                { s: 2, t: "体现在个人的情感体验、内心感受的丰富度上" },
-                { s: 3, t: "体现在与世界的交互中，通过实际行动拿到预期的结果上" }
-            ]}
-        ];
-        let answers = new Array(questions.length).fill(null);
+		let globalUserPhone = "";
+		let currentIdx = 0;
+		const questions = [
+			{ t: "1. 面对未来的不确定性，您通常的心理反应是？", o: [
+				{ s: 1, t: "反复推演最坏的可能，试图提前掌控所有细节，常感到忧虑" },
+				{ s: 2, t: "虽然知道多想无益，但仍会感到焦虑，处于被动等待的状态" },
+				{ s: 3, t: "接纳不可控的部分，将注意力集中在当下的实际行动上" }
+			]},
+			{ t: "2. 在处理重要任务时，您的专注力表现如何？", o: [
+				{ s: 3, t: "定力极强，能迅速进入深度投入状态，不受外界干扰" },
+				{ s: 2, t: "进入状态较慢，容易被手机消息或环境噪音分散注意力" },
+				{ s: 1, t: "难以集中精神，脑海中杂念较多，经常感到心神不宁" }
+			]},
+			{ t: "3. 对于日常生活和工作的琐事，您习惯如何记录和管理？", o: [
+				{ s: 3, t: "善用外部工具（如清单、便签）记录，释放大脑压力，专注决策" },
+				{ s: 2, t: "偶尔记录，但大部分信息仍依赖记忆，偶尔会感到吃力或遗忘" },
+				{ s: 1, t: "完全凭借记忆，经常感到大脑超负荷，事情一多就容易混乱" }
+			]},
+			{ t: "4. 当生活中反复出现同样的难题（如人际冲突），您的处理思路是？", o: [
+				{ s: 1, t: "认为是个人的运气不好，或者认为责任全在对方，感到无奈" },
+				{ s: 2, t: "尝试用一些通用的技巧去缓解症状，但不愿深究背后的原因" },
+				{ s: 3, t: "审视自己的行为模式，试图寻找问题的根源并从根本上改变" }
+			]},
+			{ t: "5. 当遭遇意外或他人的指责时，您的生理和情绪反应是？", o: [
+				{ s: 1, t: "情绪迅速失控，身体反应强烈（如心跳加速），难以保持理智" },
+				{ s: 2, t: "表面保持克制，但内心产生严重的负面情绪，需要很长时间排解" },
+				{ s: 3, t: "能够迅速跳出情绪，以客观的视角看待问题，保持内心平稳" }
+			]},
+			{ t: "6. 关于“知行合一”，您认为自己目前的真实状态是？", o: [
+				{ s: 2, t: "懂得很多理论知识，但在实际行动时往往还是按照旧习惯行事" },
+				{ s: 1, t: "遇到问题时，理智往往会被情绪盖过，无法运用所学的知识" },
+				{ s: 3, t: "已经将所学的知识转化为习惯，能够自然地落实到行动中" }
+			]},
+			{ t: "7. 当您感到身心疲惫、压力过大时，通常如何调节？", o: [
+				{ s: 3, t: "通过深呼吸、整理环境等物理方式，主动调节身体和空间状态" },
+				{ s: 1, t: "通过刷手机、进食等方式转移注意力，但事后感到更加疲惫" },
+				{ s: 2, t: "试图通过讲道理说服自己冷静，但往往发现收效甚微" }
+			]},
+			{ t: "8. 在做重大决定时，您更倾向于听从哪部分的声音？", o: [
+				{ s: 2, t: "过度依赖理智和逻辑分析，即使内心感到憋屈或抵触也会硬撑" },
+				{ s: 1, t: "完全受当下的心情和冲动驱动，事后往往会感到后悔" },
+				{ s: 3, t: "内心直觉与理智逻辑达成统一，能够平和且坚定地做出选择" }
+			]},
+			{ t: "9. 面对完全无法掌控的外部大环境，您的态度通常是？", o: [
+				{ s: 3, t: "明确自己的边界，只关注自己能改变的事，在微观处建立秩序" },
+				{ s: 1, t: "感到愤慨或不平，长期沉溺于抱怨环境，丧失了行动的动力" },
+				{ s: 2, t: "表面上装作不在乎，但内心非常迷茫，容易受外界噪音影响" }
+			]},
+			{ t: "10. 您认为真正的“智慧”主要体现在什么地方？", o: [
+				{ s: 1, t: "体现在掌握的理论、知识和道理的深度上" },
+				{ s: 2, t: "体现在个人的情感体验、内心感受的丰富度上" },
+				{ s: 3, t: "体现在与世界的交互中，通过实际行动拿到预期的结果上" }
+			]}
+		];
+		let answers = new Array(questions.length).fill(null);
 
-        // 缓存检测
-        window.onload = () => {
-            const cachedPhone = localStorage.getItem('mind_audit_phone');
-            if (cachedPhone) {
-                globalUserPhone = cachedPhone;
-                document.getElementById('login-overlay').classList.add('hidden');
-                document.getElementById('quiz-ui').classList.remove('hidden');
-                document.getElementById('user-display').innerText = `已绑定档案：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
-                renderQuestion();
-            }
-        };
+		window.onload = () => {
+			const cachedPhone = localStorage.getItem('mind_audit_phone');
+			if (cachedPhone) {
+				globalUserPhone = cachedPhone;
+				document.getElementById('login-overlay').classList.add('hidden');
+				document.getElementById('quiz-ui').classList.remove('hidden');
+				document.getElementById('user-display').innerText = `已绑定档案：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
+				renderQuestion();
+			}
+		};
 
-        // 手机号验证并激活
-        function activateSystem() {
-            const phone = document.getElementById('user-phone').value;
-            // 手机号正则表达式：1开头，第二位3-9，后面9位数字
-            const phoneRegex = /^1[3-9]\d{9}$/;
-            
-            if (!phoneRegex.test(phone)) {
-                alert("请输入正确的11位手机号码，以便精确匹配您的神经元档案。");
-                return;
-            }
-            
-            globalUserPhone = phone;
-            localStorage.setItem('mind_audit_phone', phone);
-            document.getElementById('login-overlay').classList.add('hidden');
-            document.getElementById('quiz-ui').classList.remove('hidden');
-            document.getElementById('user-display').innerText = `档案已激活：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
-            renderQuestion();
-        }
+		function activateSystem() {
+			const phone = document.getElementById('user-phone').value;
+			const phoneRegex = /^1[3-9]\d{9}$/;
+			if (!phoneRegex.test(phone)) {
+				alert("请输入正确的11位手机号码，以便精确匹配您的神经元档案。");
+				return;
+			}
+			globalUserPhone = phone;
+			localStorage.setItem('mind_audit_phone', phone);
+			document.getElementById('login-overlay').classList.add('hidden');
+			document.getElementById('quiz-ui').classList.remove('hidden');
+			document.getElementById('user-display').innerText = `档案已激活：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
+			renderQuestion();
+		}
 
-        // --- 其余逻辑保持不变 ---
-        const dotsContainer = document.getElementById('dots-container');
-        for(let i=0; i<questions.length; i++) {
-            const dot = document.createElement('div');
-            dot.className = "dot";
-            dot.id = `dot-${i}`;
-            dot.onclick = () => jumpToQuestion(i);
-            dotsContainer.appendChild(dot);
-        }
+		const dotsContainer = document.getElementById('dots-container');
+		for(let i=0; i<questions.length; i++) {
+			const dot = document.createElement('div');
+			dot.className = "dot";
+			dot.id = `dot-${i}`;
+			dot.onclick = () => jumpToQuestion(i);
+			dotsContainer.appendChild(dot);
+		}
 
-        function renderQuestion() {
-            const q = questions[currentIdx];
-            const qBox = document.getElementById('q-container');
-            qBox.classList.remove('fade-in');
-            void qBox.offsetWidth;
-            qBox.classList.add('fade-in');
-            document.getElementById('q-tag').innerText = `测算模块 MODULE 0${currentIdx + 1}`;
-            document.getElementById('q-title').innerText = q.t;
-            document.getElementById('progress-num').innerText = `${String(currentIdx + 1).padStart(2, '0')} / 10`;
-            const space = document.getElementById('options-space');
-            space.innerHTML = '';
-            q.o.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = `option-btn w-full text-left p-5 rounded-2xl text-[13px] md:text-sm leading-relaxed ${answers[currentIdx] === idx ? 'option-active' : 'bg-white'}`;
-                btn.innerText = opt.t;
-                btn.onclick = () => { answers[currentIdx] = idx; updateNavigation(); if(currentIdx < 9) setTimeout(() => nextStep(), 300); else renderQuestion(); };
-                space.appendChild(btn);
-            });
-            const nextBtn = document.getElementById('next-btn');
-            if(currentIdx === 9) { nextBtn.innerHTML = `生成审计报告 ✨`; nextBtn.onclick = () => finishAudit(); } 
-            else { nextBtn.innerHTML = `下一题 →`; nextBtn.onclick = () => nextStep(); }
-            updateNavigation();
-        }
+		function renderQuestion() {
+			const q = questions[currentIdx];
+			const qBox = document.getElementById('q-container');
+			qBox.classList.remove('fade-in');
+			void qBox.offsetWidth;
+			qBox.classList.add('fade-in');
+			document.getElementById('q-tag').innerText = `测算模块 MODULE 0${currentIdx + 1}`;
+			document.getElementById('q-title').innerText = q.t;
+			document.getElementById('progress-num').innerText = `${String(currentIdx + 1).padStart(2, '0')} / 10`;
+			const space = document.getElementById('options-space');
+			space.innerHTML = '';
+			q.o.forEach((opt, idx) => {
+				const btn = document.createElement('button');
+				btn.className = `option-btn w-full text-left p-5 rounded-2xl text-[13px] md:text-sm leading-relaxed ${answers[currentIdx] === idx ? 'option-active' : 'bg-white'}`;
+				btn.innerText = opt.t;
+				btn.onclick = () => { answers[currentIdx] = idx; updateNavigation(); if(currentIdx < 9) setTimeout(() => nextStep(), 300); else renderQuestion(); };
+				space.appendChild(btn);
+			});
+			const nextBtn = document.getElementById('next-btn');
+			if(currentIdx === 9) { nextBtn.innerHTML = `生成审计报告 ✨`; nextBtn.onclick = () => finishAudit(); } 
+			else { nextBtn.innerHTML = `下一题 →`; nextBtn.onclick = () => nextStep(); }
+			updateNavigation();
+		}
 
-        function updateNavigation() {
-            for(let i=0; i<questions.length; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                dot.className = "dot";
-                if(i === currentIdx) dot.classList.add('dot-active');
-                else if(answers[i] !== null) dot.classList.add('dot-completed');
-            }
-            document.getElementById('prev-btn').disabled = (currentIdx === 0);
-        }
+		function updateNavigation() {
+			for(let i=0; i<questions.length; i++) {
+				const dot = document.getElementById(`dot-${i}`);
+				dot.className = "dot";
+				if(i === currentIdx) dot.classList.add('dot-active');
+				else if(answers[i] !== null) dot.classList.add('dot-completed');
+			}
+			document.getElementById('prev-btn').disabled = (currentIdx === 0);
+		}
 
-        function jumpToQuestion(i) { currentIdx = i; renderQuestion(); }
-        function nextStep() { if(currentIdx < 9) { currentIdx++; renderQuestion(); } }
-        function prevStep() { if(currentIdx > 0) { currentIdx--; renderQuestion(); } }
+		function jumpToQuestion(i) { currentIdx = i; renderQuestion(); }
+		function nextStep() { if(currentIdx < 9) { currentIdx++; renderQuestion(); } }
+		function prevStep() { if(currentIdx > 0) { currentIdx--; renderQuestion(); } }
 
-        function finishAudit() {
-            if(answers.includes(null)) { alert("请完成所有模块审计"); return; }
-            document.getElementById('quiz-ui').classList.add('hidden');
-            document.getElementById('loading-ui').classList.remove('hidden');
-            setTimeout(showResult, 2500);
-        }
+		function finishAudit() {
+			if(answers.includes(null)) { alert("请完成所有模块审计"); return; }
+			document.getElementById('quiz-ui').classList.add('hidden');
+			document.getElementById('loading-ui').classList.remove('hidden');
+			setTimeout(showResult, 2500);
+		}
 
-        function showResult() {
-            document.getElementById('loading-ui').classList.add('hidden');
-            document.getElementById('result-ui').classList.remove('hidden');
-            const score = answers.reduce((acc, currIdx, qIdx) => acc + questions[qIdx].o[currIdx].s, 0);
-            let start = 0;
-            const timer = setInterval(() => { if (start >= score) { clearInterval(timer); document.getElementById('final-score').innerText = score; } else { start++; document.getElementById('final-score').innerText = start; } }, 40);
+		function showResult() {
+			document.getElementById('loading-ui').classList.add('hidden');
+			document.getElementById('result-ui').classList.remove('hidden');
+			const score = answers.reduce((acc, currIdx, qIdx) => acc + questions[qIdx].o[currIdx].s, 0);
+			let start = 0;
+			const timer = setInterval(() => { if (start >= score) { clearInterval(timer); document.getElementById('final-score').innerText = score; } else { start++; document.getElementById('final-score').innerText = start; } }, 40);
 
-            // 结果分段逻辑（保持你要求的精细化等级）
-            let res = {};
-            if(score <= 13) {
-                res = { 
-                    tag: "严重内耗状态：负面情绪循环", 
-                    bg: "bg-red-500 text-white", 
-                    diag: "您的身心系统目前处于严重的超负荷状态。由于长期积累的压力，您的思维已经形成了一种“自动寻找痛苦”的惯性，导致您在平静时也会不自觉地陷入焦虑。目前的您正被潜意识中的负面模式所掌控，很难通过单纯的理智思考来扭转现状。", 
-                    solve: "请停止尝试通过“想通道理”来解决问题，目前的您需要的是生理层面的彻底休整。建议优先执行“物理重置”：保证充足睡眠，补充水分和电解质，并练习“深度呼吸法”来强制降低心率，先让身体恢复平静，再处理心理问题。" 
-                };
-            } else if(score <= 17) {
-                res = { 
-                    tag: "过度负载状态：情绪调节失衡", 
-                    bg: "bg-orange-500 text-white", 
-                    diag: "您正处于一种精神极度疲惫的状态。您试图掌控生活中所有的不确定性，这种过度思考导致了精神精力的枯竭。目前的您缺乏安全感，情绪波动剧烈，在人际关系中容易表现出极端化倾向，要么过度投入，要么彻底逃避，很难保持稳定的心态。", 
-                    solve: "请放下“掌控未来”的执念，将精力收回到此时此刻。建议您减少超前思考，多进行真实的物理活动。感到心烦意乱时，立即去整理房间或进行体力劳动，通过与现实世界的互动来切断大脑的焦虑循环，恢复心理秩序。" 
-                };
-            } else if(score <= 21) {
-                res = { 
-                    tag: "认知偏差状态：理智与感受脱节", 
-                    bg: "bg-yellow-400 text-black", 
-                    diag: "您的思维系统运行尚可，但理智与真实的感受之间存在断层。您习惯用逻辑来压抑情绪，导致您虽然懂得很多大道理，但在面对实际问题时，身体和情绪往往不听使唤。您常将身体的疲劳信号误读为焦虑，从而产生了不必要的心理负担。", 
-                    solve: "建议您尝试“反向调节”。不要只用简单的“烦躁”来概括心情，尝试精准命名您的感受。同时，学会使用外部工具（如书写、清单）来分担大脑的压力。将焦虑写在纸上并销毁，通过这种仪式感来辅助理智重新接管情绪。" 
-                };
-            } else if(score <= 25) {
-                res = { 
-                    tag: "心智重建阶段：自我意识觉醒", 
-                    bg: "bg-emerald-500 text-white", 
-                    diag: "您已经具备了较强的自我觉察能力。您开始意识到情绪并不是外界强加给您的，而是您可以主动调节的。大部分时间里，您能保持清醒的边界感，不盲目卷入内耗。不过，旧有的思维惯性依然存在，在遇到重大挫折时，仍有可能会短暂地回到消极状态。", 
-                    solve: "请记住，稳定的心态需要长期的生理习惯支撑。建议您通过持续的行动来巩固新的思维模式。坚持每日的身体调节练习，将偶尔的灵光一现转化为稳固的生活习惯。当新的神经连接变得强壮，您将彻底告别内耗。" 
-                };
-            } else if(score <= 28) {
-                res = { 
-                    tag: "高效协同状态：知行合一觉醒者", 
-                    bg: "bg-blue-500 text-white", 
-                    diag: "您的身心系统运行非常顺畅，内耗极低。您的本能欲望、情感需求与理智逻辑已经达成了高度的和谐，内心拥有强大的定力。您不再试图掌控不可控的事物，而是清晰地知道，真正的智慧在于与现实世界的积极互动和行动结果中。", 
-                    solve: "您已经超越了绝大多数人的心智水平。建议您继续保持对身体状态（如睡眠、营养）的敏锐监测。继续通过精准的语言描述世界，通过果断的行动来持续优化您的思维逻辑，保持系统的巅峰运行。" 
-                };
-            } else {
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-                res = { 
-                    tag: "顶级玩家：生命体验掌控者", 
-                    bg: "bg-purple-600 text-white", 
-                    diag: "恭喜您，您已经掌握了心智运行的核心底层逻辑。您不再受困于过去的阴影，也不再被外界环境左右。您能够将呼吸、环境和行动转化为提升自我的武器。您已经从被动接受生活安排的受害者，进化为主动创造生命体验的顶层架构师。", 
-                    solve: "作为顶级玩家，您已经不需要普通的心理建议。建议您保持现有的修行频率，在面临更大的人生挑战时，随时调用周遭的一切资源作为您的工具。继续探索生命认知的上限，实现更高维度的自我超越。" 
-                };
-            }
-            document.getElementById('status-tag').innerText = res.tag;
-            document.getElementById('status-tag').className = `inline-block px-4 py-1 rounded-full text-[10px] font-bold tracking-widest mb-4 ${res.bg}`;
-            document.getElementById('diag-text').innerText = res.diag;
-            document.getElementById('solve-text').innerText = res.solve;
-            
-			pushToFeishu(score, res.tag,res.diag,res.solve);
-        }
+			let res = {};
+			if(score <= 13) {
+				res = { tag: "严重内耗状态：负面情绪循环", bg: "bg-red-500 text-white", diag: "您的身心系统目前处于严重的超负荷状态。由于长期积累的压力，您的思维已经形成了一种“自动寻找痛苦”的惯性，导致您在平静时也会不自觉地陷入焦虑。目前的您正被潜意识中的负面模式所掌控，很难通过单纯的理智思考来扭转现状。", solve: "请停止尝试通过“想通道理”来解决问题，目前的您需要的是生理层面的彻底休整。建议优先执行“物理重置”：保证充足睡眠，补充水分和电解质，并练习“深度呼吸法”来强制降低心率，先让身体恢复平静，再处理心理问题。" };
+			} else if(score <= 17) {
+				res = { tag: "过度负载状态：情绪调节失衡", bg: "bg-orange-500 text-white", diag: "您正处于一种精神极度疲惫的状态。您试图掌控生活中所有的不确定性，这种过度思考导致了精神精力的枯竭。目前的您缺乏安全感，情绪波动剧烈，在人际关系中容易表现出极端化倾向，要么过度投入，要么彻底逃避，很难保持稳定的心态。", solve: "请放下“掌控未来”的执念，将精力收回到此时此刻。建议您减少超前思考，多进行真实的物理活动。感到心烦意乱时，立即去整理房间或进行体力劳动，通过与现实世界的互动来切断大脑的焦虑循环，恢复心理秩序。" };
+			} else if(score <= 21) {
+				res = { tag: "认知偏差状态：理智与感受脱节", bg: "bg-yellow-400 text-black", diag: "您的思维系统运行尚可，但理智与真实的感受之间存在断层。您习惯用逻辑来压抑情绪，导致您虽然懂得很多大道理，但在面对实际问题时，身体和情绪往往不听使唤。您常将身体的疲劳信号误读为焦虑，从而产生了不必要的心理负担。", solve: "建议您尝试“反向调节”。不要只用简单的“烦躁”来概括心情，尝试精准命名您的感受。同时，学会使用外部工具（如书写、清单）来分担大脑的压力。将焦虑写在纸上并销毁，通过这种仪式感来辅助理智重新接管情绪。" };
+			} else if(score <= 25) {
+				res = { tag: "心智重建阶段：自我意识觉醒", bg: "bg-emerald-500 text-white", diag: "您已经具备了较强的自我觉察能力。您开始意识到情绪并不是外界强加给您的，而是您可以主动调节的。大部分时间里，您能保持清醒的边界感，不盲目卷入内耗。不过，旧有的思维惯性依然存在，在遇到重大挫折时，仍有可能会短暂地回到消极状态。", solve: "请记住，稳定的心态需要长期的生理习惯支撑。建议您通过持续的行动来巩固新的思维模式。坚持每日的身体调节练习，将偶尔的灵光一现转化为稳固的生活习惯。当新的神经连接变得强壮，您将彻底告别内耗。" };
+			} else if(score <= 28) {
+				res = { tag: "高效协同状态：知行合一觉醒者", bg: "bg-blue-500 text-white", diag: "您的身心系统运行非常顺畅，内耗极低。您的本能欲望、情感需求与理智逻辑已经达成了高度的和谐，内心拥有强大的定力。您不再试图掌控不可控的事物，而是清晰地知道，真正的智慧在于与现实世界的积极互动和行动结果中。", solve: "您已经超越了绝大多数人的心智水平。建议您继续保持对身体状态（如睡眠、营养）的敏锐监测。继续通过精准的语言描述世界，通过果断的行动来持续优化您的思维逻辑，保持系统的巅峰运行。" };
+			} else {
+				confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+				res = { tag: "顶级玩家：生命体验掌控者", bg: "bg-purple-600 text-white", diag: "恭喜您，您已经掌握了心智运行的核心底层逻辑。您不再受困于过去的阴影，也不再被外界环境左右。您能够将呼吸、环境和行动转化为提升自我的武器。您已经从被动接受生活安排的受害者，进化为主动创造生命体验的顶层架构师。", solve: "作为顶级玩家，您已经不需要普通的心理建议。建议您保持现有的修行频率，在面临更大的人生挑战时，随时调用周遭的一切资源作为您的工具。继续探索生命认知的上限，实现更高维度的自我超越。" };
+			}
 
-        async function pushToFeishu(score, tag) {
-            // 这里替换成你的 Pipedream 或机器人 Webhook 地址
-            //const botWebhook = "https://open.feishu.cn/open-apis/bot/v2/hook/4aad4c7e-08ff-473f-9ae9-70b4a179b10c"; 
-			const botWebhook = "https://eourpinh6l190e0.m.pipedream.net"
+			document.getElementById('status-tag').innerText = res.tag;
+			document.getElementById('status-tag').className = `inline-block px-4 py-1 rounded-full text-[10px] font-bold tracking-widest mb-4 ${res.bg}`;
+			document.getElementById('diag-text').innerText = res.diag;
+			document.getElementById('solve-text').innerText = res.solve;
+			
+			// 【核心修复点 1】：调用时传入 4 个参数
+			pushToFeishu(score, res.tag, res.diag, res.solve);
+		}
+
+		// 【核心修复点 2】：函数定义接收 4 个参数
+		async function pushToFeishu(score, tag, diag, solve) {
+			const botWebhook = "https://eourpinh6l190e0.m.pipedream.net";
 			
 			const payload = {
-                "phone": globalUserPhone,
-                "score": score,
-                "tag": tag,
-				"diag": diag 
-            };
+				"phone": globalUserPhone,
+				"score": score,
+				"tag": tag,
+				"diag": diag, // 现在 diag 有值了
+				"solve": solve // 现在 solve 有值了
+			};
 			
-            fetch(botWebhook, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(payload)
-            });
-        }
-    </script>
+			fetch(botWebhook, {
+				method: 'POST',
+				mode: 'no-cors',
+				body: JSON.stringify(payload)
+			});
+		}
+	</script>
 </body>
 </html>
