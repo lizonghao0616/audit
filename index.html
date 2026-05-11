@@ -24,7 +24,7 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- 身份绑定/登录遮罩层 -->
+    <!-- 档案绑定登录层 -->
     <div id="login-overlay" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/90 backdrop-blur-2xl">
         <div class="glass-card bg-white p-10 rounded-[2.5rem] max-w-sm w-full text-center shadow-2xl">
             <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -34,11 +34,8 @@
             </div>
             <h2 class="text-xl font-semibold mb-2 text-slate-800">档案绑定</h2>
             <p class="text-[10px] text-slate-400 mb-8 tracking-[0.2em] uppercase">请输入手机号以激活神经元档案</p>
-            
-            <!-- 修改为手机号输入 -->
             <input type="tel" id="user-phone" maxlength="11" placeholder="请输入11位手机号码" 
                    class="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 mb-4 focus:outline-none focus:ring-2 focus:ring-black transition-all text-center text-lg tracking-wider">
-            
             <button onclick="activateSystem()" class="w-full bg-black text-white py-4 rounded-full font-medium hover:bg-slate-800 transition-all shadow-lg">
                 同步数据并开始审计
             </button>
@@ -47,10 +44,11 @@
     </div>
 
     <div class="w-full max-w-xl">
+        <!-- 审计操作界面 -->
         <div id="quiz-ui" class="hidden">
             <div class="mb-12 text-center">
                 <h1 class="text-2xl font-semibold tracking-tighter italic text-slate-800">心智审计 · MIND AUDIT</h1>
-                <p id="user-display" class="text-[10px] text-slate-400 mt-1 tracking-[0.3em] uppercase">档案加载中...</p>
+                <p id="user-display" class="text-[10px] text-slate-400 mt-1 tracking-[0.3em] uppercase">加载中...</p>
                 <div class="mt-6 flex justify-center space-x-3" id="dots-container"></div>
             </div>
 
@@ -69,15 +67,17 @@
             </div>
         </div>
 
-        <!-- 结果展示及后续逻辑保持不变 -->
+        <!-- 报告生成动画 -->
         <div id="loading-ui" class="hidden text-center py-20">
             <div class="relative w-24 h-24 mx-auto mb-8 animate-pulse">
                 <div class="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
                 <div class="absolute inset-0 border-4 border-t-black rounded-full animate-spin"></div>
             </div>
-            <p class="text-sm font-mono tracking-[0.2em] text-slate-500">正在同步数据至作战中心...</p>
+            <p class="text-sm font-mono tracking-[0.2em] text-slate-500">正在同步神经元数据至作战中心...</p>
+            <p class="text-[10px] text-slate-300 mt-4 font-mono uppercase">Data link: Calculation Irreducible | Scanning...</p>
         </div>
 
+        <!-- 结果展示界面 -->
         <div id="result-ui" class="hidden fade-in space-y-6">
             <div class="glass-card rounded-3xl p-10 text-center relative overflow-hidden">
                 <div id="status-tag" class="inline-block px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest mb-4">审计完成</div>
@@ -91,7 +91,7 @@
                 </div>
                 <div id="solve-box" class="p-6 rounded-2xl bg-slate-50 border border-slate-100">
                     <h4 class="text-slate-900 font-bold mb-3 flex items-center"> 🛠️ 物理补丁 / 进阶指南</h4>
-                    <p id="solve-text"></p>
+                    <p id="solve-text" class="leading-relaxed"></p>
                 </div>
             </div>
             <button onclick="location.reload()" class="w-full bg-black text-white py-5 rounded-full text-sm font-medium hover:bg-slate-800 transition-all shadow-xl">重新开启审计</button>
@@ -102,56 +102,16 @@
 		let globalUserPhone = "";
 		let currentIdx = 0;
 		const questions = [
-			{ t: "1. 面对未来的不确定性，您通常的心理反应是？", o: [
-				{ s: 1, t: "反复推演最坏的可能，试图提前掌控所有细节，常感到忧虑" },
-				{ s: 2, t: "虽然知道多想无益，但仍会感到焦虑，处于被动等待的状态" },
-				{ s: 3, t: "接纳不可控的部分，将注意力集中在当下的实际行动上" }
-			]},
-			{ t: "2. 在处理重要任务时，您的专注力表现如何？", o: [
-				{ s: 3, t: "定力极强，能迅速进入深度投入状态，不受外界干扰" },
-				{ s: 2, t: "进入状态较慢，容易被手机消息或环境噪音分散注意力" },
-				{ s: 1, t: "难以集中精神，脑海中杂念较多，经常感到心神不宁" }
-			]},
-			{ t: "3. 对于日常生活和工作的琐事，您习惯如何记录和管理？", o: [
-				{ s: 3, t: "善用外部工具（如清单、便签）记录，释放大脑压力，专注决策" },
-				{ s: 2, t: "偶尔记录，但大部分信息仍依赖记忆，偶尔会感到吃力或遗忘" },
-				{ s: 1, t: "完全凭借记忆，经常感到大脑超负荷，事情一多就容易混乱" }
-			]},
-			{ t: "4. 当生活中反复出现同样的难题（如人际冲突），您的处理思路是？", o: [
-				{ s: 1, t: "认为是个人的运气不好，或者认为责任全在对方，感到无奈" },
-				{ s: 2, t: "尝试用一些通用的技巧去缓解症状，但不愿深究背后的原因" },
-				{ s: 3, t: "审视自己的行为模式，试图寻找问题的根源并从根本上改变" }
-			]},
-			{ t: "5. 当遭遇意外或他人的指责时，您的生理和情绪反应是？", o: [
-				{ s: 1, t: "情绪迅速失控，身体反应强烈（如心跳加速），难以保持理智" },
-				{ s: 2, t: "表面保持克制，但内心产生严重的负面情绪，需要很长时间排解" },
-				{ s: 3, t: "能够迅速跳出情绪，以客观的视角看待问题，保持内心平稳" }
-			]},
-			{ t: "6. 关于“知行合一”，您认为自己目前的真实状态是？", o: [
-				{ s: 2, t: "懂得很多理论知识，但在实际行动时往往还是按照旧习惯行事" },
-				{ s: 1, t: "遇到问题时，理智往往会被情绪盖过，无法运用所学的知识" },
-				{ s: 3, t: "已经将所学的知识转化为习惯，能够自然地落实到行动中" }
-			]},
-			{ t: "7. 当您感到身心疲惫、压力过大时，通常如何调节？", o: [
-				{ s: 3, t: "通过深呼吸、整理环境等物理方式，主动调节身体和空间状态" },
-				{ s: 1, t: "通过刷手机、进食等方式转移注意力，但事后感到更加疲惫" },
-				{ s: 2, t: "试图通过讲道理说服自己冷静，但往往发现收效甚微" }
-			]},
-			{ t: "8. 在做重大决定时，您更倾向于听从哪部分的声音？", o: [
-				{ s: 2, t: "过度依赖理智和逻辑分析，即使内心感到憋屈或抵触也会硬撑" },
-				{ s: 1, t: "完全受当下的心情和冲动驱动，事后往往会感到后悔" },
-				{ s: 3, t: "内心直觉与理智逻辑达成统一，能够平和且坚定地做出选择" }
-			]},
-			{ t: "9. 面对完全无法掌控的外部大环境，您的态度通常是？", o: [
-				{ s: 3, t: "明确自己的边界，只关注自己能改变的事，在微观处建立秩序" },
-				{ s: 1, t: "感到愤慨或不平，长期沉溺于抱怨环境，丧失了行动的动力" },
-				{ s: 2, t: "表面上装作不在乎，但内心非常迷茫，容易受外界噪音影响" }
-			]},
-			{ t: "10. 您认为真正的“智慧”主要体现在什么地方？", o: [
-				{ s: 1, t: "体现在掌握的理论、知识和道理的深度上" },
-				{ s: 2, t: "体现在个人的情感体验、内心感受的丰富度上" },
-				{ s: 3, t: "体现在与世界的交互中，通过实际行动拿到预期的结果上" }
-			]}
+			{ t: "1. 面对未来的不确定性，您通常的心理反应是？", o: [{ s: 1, t: "反复推演最坏的可能，试图提前掌控所有细节，常感到忧虑" }, { s: 2, t: "虽然知道多想无益，但仍会感到焦虑，处于被动等待的状态" }, { s: 3, t: "接纳不可控的部分，将注意力集中在当下的实际行动上" }] },
+			{ t: "2. 在处理重要任务时，您的专注力表现如何？", o: [{ s: 3, t: "定力极强，能迅速进入深度投入状态，不受外界干扰" }, { s: 2, t: "进入状态较慢，容易被手机消息或环境噪音分散注意力" }, { s: 1, t: "难以集中精神，脑海中杂念较多，经常感到心神不宁" }] },
+			{ t: "3. 对于日常生活和工作的琐事，您习惯如何记录和管理？", o: [{ s: 3, t: "善用外部工具（如清单、便签）记录，释放大脑压力，专注决策" }, { s: 2, t: "偶尔记录，但大部分信息仍依赖记忆，偶尔会感到吃力或遗忘" }, { s: 1, t: "完全凭借记忆，经常感到大脑超负荷，事情一多就容易混乱" }] },
+			{ t: "4. 当生活中反复出现同样的难题（如人际冲突），您的处理思路是？", o: [{ s: 1, t: "认为是个人的运气不好，或者责任全在对方，感到无奈" }, { s: 2, t: "尝试用一些通用的技巧去缓解症状，但不愿深究背后的原因" }, { s: 3, t: "审视自己的行为模式，试图寻找问题的根源并从根本上改变" }] },
+			{ t: "5. 当遭遇意外或他人的指责时，您的生理和情绪反应是？", o: [{ s: 1, t: "情绪迅速失控，身体反应强烈（如心跳加速），难以保持理智" }, { s: 2, t: "表面保持克制，但内心产生严重的负面情绪，需要很长时间排解" }, { s: 3, t: "能够迅速跳出情绪，以客观的视角看待问题，保持内心平稳" }] },
+			{ t: "6. 关于“知行合一”，您认为自己目前的真实状态是？", o: [{ s: 2, t: "懂得很多理论知识，但在实际行动时往往还是按照旧习惯行事" }, { s: 1, t: "遇到问题时，理智往往会被情绪盖过，无法运用所学的知识" }, { s: 3, t: "已经将所学的知识转化为习惯，能够自然地落实到行动中" }] },
+			{ t: "7. 当您感到身心疲惫、压力过大时，通常如何调节？", o: [{ s: 3, t: "通过深呼吸、整理环境等物理方式，主动调节身体和空间状态" }, { s: 1, t: "通过刷手机、进食等方式转移注意力，但事后感到更加疲惫" }, { s: 2, t: "试图通过讲道理说服自己冷静，但往往发现收效甚微" }] },
+			{ t: "8. 在做重大决定时，您更倾向于听从哪部分的声音？", o: [{ s: 2, t: "过度依赖理智和逻辑分析，即使内心感到憋屈或抵触也会硬撑" }, { s: 1, t: "完全受当下的心情和冲动驱动，事后往往会感到后悔" }, { s: 3, t: "内心直觉与理智逻辑达成统一，能够平和且坚定地做出选择" }] },
+			{ t: "9. 面对完全无法掌控的外部大环境，您的态度通常是？", o: [{ s: 3, t: "明确自己的边界，只关注自己能改变的事，在微观处建立秩序" }, { s: 1, t: "感到愤慨或不平，长期沉溺于抱怨环境，丧失了行动的动力" }, { s: 2, t: "表面上装作不在乎，但内心非常迷茫，容易受外界噪音影响" }] },
+			{ t: "10. 您认为真正的“智慧”主要体现在什么地方？", o: [{ s: 1, t: "体现在掌握的理论、知识和道理的深度上" }, { s: 2, t: "体现在个人的情感体验、内心感受的丰富度上" }, { s: 3, t: "体现在与世界的交互中，通过实际行动拿到预期的结果上" }] }
 		];
 		let answers = new Array(questions.length).fill(null);
 
@@ -161,7 +121,7 @@
 				globalUserPhone = cachedPhone;
 				document.getElementById('login-overlay').classList.add('hidden');
 				document.getElementById('quiz-ui').classList.remove('hidden');
-				document.getElementById('user-display').innerText = `已绑定档案：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
+				document.getElementById('user-display').innerText = `已绑定：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
 				renderQuestion();
 			}
 		};
@@ -169,15 +129,12 @@
 		function activateSystem() {
 			const phone = document.getElementById('user-phone').value;
 			const phoneRegex = /^1[3-9]\d{9}$/;
-			if (!phoneRegex.test(phone)) {
-				alert("请输入正确的11位手机号码，以便精确匹配您的神经元档案。");
-				return;
-			}
+			if (!phoneRegex.test(phone)) { alert("请输入正确的11位手机号码。"); return; }
 			globalUserPhone = phone;
 			localStorage.setItem('mind_audit_phone', phone);
 			document.getElementById('login-overlay').classList.add('hidden');
 			document.getElementById('quiz-ui').classList.remove('hidden');
-			document.getElementById('user-display').innerText = `档案已激活：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
+			document.getElementById('user-display').innerText = `已激活：${globalUserPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')}`;
 			renderQuestion();
 		}
 
@@ -230,13 +187,13 @@
 
 		function finishAudit() {
 			if(answers.includes(null)) { alert("请完成所有模块审计"); return; }
-			document.getElementById('quiz-ui').classList.add('hidden');
+            document.getElementById('quiz-ui').classList.add('hidden');
 			document.getElementById('loading-ui').classList.remove('hidden');
 			setTimeout(showResult, 2500);
 		}
 
-		function showResult() {
-			document.getElementById('loading-ui').classList.add('hidden');
+function showResult() {
+            document.getElementById('loading-ui').classList.add('hidden');
 			document.getElementById('result-ui').classList.remove('hidden');
 			const score = answers.reduce((acc, currIdx, qIdx) => acc + questions[qIdx].o[currIdx].s, 0);
 			let start = 0;
@@ -244,51 +201,98 @@
 
 			let res = {};
 			if(score <= 13) {
-				res = { tag: "严重内耗状态：负面情绪循环", bg: "bg-red-500 text-white", diag: "您的身心系统目前处于严重的超负荷状态。由于长期积累的压力，您的思维已经形成了一种“自动寻找痛苦”的惯性，导致您在平静时也会不自觉地陷入焦虑。目前的您正被潜意识中的负面模式所掌控，很难通过单纯的理智思考来扭转现状。", solve: "请停止尝试通过“想通道理”来解决问题，目前的您需要的是生理层面的彻底休整。建议优先执行“物理重置”：保证充足睡眠，补充水分和电解质，并练习“深度呼吸法”来强制降低心率，先让身体恢复平静，再处理心理问题。" };
+				res = { 
+                    tag: "严重内耗状态：系统全面熔断", 
+                    bg: "bg-red-500 text-white", 
+                    diag: "您的身心系统正处于重度超负荷状态。思维已形成“自动捕获痛苦”的惯性，生理层面的负面反馈已形成死循环。目前的您正被潜意识中的防空转模式掌控，理智无法介入。", 
+                    solve: `<strong>🛠️ 物理补丁（三步紧急重置）：</strong><br>
+                            1. <strong>环境与营养：</strong>立即执行<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkOauWgSmAaEAmgbwAOc" target="_blank" class="underline font-bold">【硬件燃料·科学食谱】</a>，通过基础维保套件（十字花科）清理神经递质杂质。<br>
+                            2. <strong>强制关机：</strong>佩戴耳机运行<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAklNarLv9AaEAmgbwAOc" target="_blank" class="underline font-bold">【Delta-01：硬件重构】</a>，通过超低频补丁强制系统进入深层修复模式。<br>
+                            3. <strong>阻断信号：</strong>感到心慌时练习<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkK93EOqeAYcA-AYMAHw" target="_blank" class="underline font-bold">【箱式呼吸：保持定力】</a>，物理截断杏仁核的虚假警报。<br><br>
+                            <strong>🚀 进阶指南：</strong><br>
+                            - <strong>理论底座：</strong>研读<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkoQGR0ZwAYcA-AYMAHw" target="_blank" class="underline font-bold">《没有不好的你 (No Bad Parts)》</a>，理解内心的“消防员”部分，拆解痛苦捕获的底层逻辑；<br>
+                            - <strong>深度修复：</strong>查阅<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkW0Ztj50AYcA-AYMAHw" target="_blank" class="underline font-bold">《身体从未忘记》</a>，了解创伤对神经通路的重塑机制，从生理层面打破负面反馈循环；<br>
+                            - <strong>情绪锚定：</strong>配合<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkptjZ0orAYcA-AYMAHw" target="_blank" class="underline font-bold">《大脑的情绪生活》</a>，识别情绪触发的生理信号，建立早期干预机制。`
+                };
 			} else if(score <= 17) {
-				res = { tag: "过度负载状态：情绪调节失衡", bg: "bg-orange-500 text-white", diag: "您正处于一种精神极度疲惫的状态。您试图掌控生活中所有的不确定性，这种过度思考导致了精神精力的枯竭。目前的您缺乏安全感，情绪波动剧烈，在人际关系中容易表现出极端化倾向，要么过度投入，要么彻底逃避，很难保持稳定的心态。", solve: "请放下“掌控未来”的执念，将精力收回到此时此刻。建议您减少超前思考，多进行真实的物理活动。感到心烦意乱时，立即去整理房间或进行体力劳动，通过与现实世界的互动来切断大脑的焦虑循环，恢复心理秩序。" };
+				res = { 
+                    tag: "过度负载状态：战时高耗能模式", 
+                    bg: "bg-orange-500 text-white", 
+                    diag: "您试图掌控过多的不确定性，导致杏仁核过度活跃。您处于一种“随时准备战斗”的疲惫感中，人际关系和决策容易走极端，算力已被未来的焦虑提前预支。", 
+                    solve: `<strong>🛠️ 物理补丁（两阶段压力切断）：</strong><br>
+                            1. <strong>回收算力：</strong>运行<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkwHKRFikAaEAmgbwAOc" target="_blank" class="underline font-bold">【Alpha-02：战术冷静】</a>，强行屏蔽环境杂讯，将精神能量从外部收回到呼吸点。<br>
+                            2. <strong>修复韧性：</strong>练习<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkzn4cw1TAYcA-AYMAHw" target="_blank" class="underline font-bold">【谐振呼吸：深度解压】</a>，通过心率变异率（HRV）调节，修复受损的神经系统。<br><br>
+                            <strong>🚀 进阶指南：</strong><br>
+                            - <strong>神经调节：</strong>研读<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkk3VwZr1AYcA-AYMAHw" target="_blank" class="underline font-bold">《多层迷走神经指南》</a>，学习主动切换交感/副交感神经模式，降低杏仁核激活阈值；<br>
+                            - <strong>边界构建：</strong>结合<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkIXadqxCAYcA-AYMAHw" target="_blank" class="underline font-bold">《被忽视的孩子》</a>，梳理成长过程中形成的“过度掌控”模式，重建可控与不可控的认知边界；<br>
+                            - <strong>压力转化：</strong>运用<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAk2q00WkyAYcA-AYMAHw" target="_blank" class="underline font-bold">【正念呼吸】</a>，将对未来的焦虑转化为对当下的感知，减少算力预支。`
+                };
 			} else if(score <= 21) {
-				res = { tag: "认知偏差状态：理智与感受脱节", bg: "bg-yellow-400 text-black", diag: "您的思维系统运行尚可，但理智与真实的感受之间存在断层。您习惯用逻辑来压抑情绪，导致您虽然懂得很多大道理，但在面对实际问题时，身体和情绪往往不听使唤。您常将身体的疲劳信号误读为焦虑，从而产生了不必要的心理负担。", solve: "建议您尝试“反向调节”。不要只用简单的“烦躁”来概括心情，尝试精准命名您的感受。同时，学会使用外部工具（如书写、清单）来分担大脑的压力。将焦虑写在纸上并销毁，通过这种仪式感来辅助理智重新接管情绪。" };
+				res = { 
+                    tag: "认知偏差状态：理智伪装主心骨", 
+                    bg: "bg-yellow-400 text-black", 
+                    diag: "您的理智与身体信号存在断层。您习惯用逻辑压抑情绪，导致“道理都懂但做不到”。目前的系统性问题在于，大脑经常将单纯的生理疲劳误判为心理焦虑。", 
+                    solve: `<strong>🛠️ 物理补丁（深层信号连接）：</strong><br>
+                            1. <strong>深度锚定：</strong>运行<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkIgaRKA0AaEAmgbwAOc" target="_blank" class="underline font-bold">【Theta-01：深层重塑】</a>，在潜意识边缘尝试连接理智与神经末梢。<br>
+                            2. <strong>重连世界：</strong>练习<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAk2q00WkyAYcA-AYMAHw" target="_blank" class="underline font-bold">【正念呼吸：重连世界】</a>，通过物理触觉找回“观察者”视角。<br><br>
+                            <strong>🚀 进阶指南：</strong><br>
+                            - <strong>断层溯源：</strong>研读<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAk5ZQtyi5AYcA-AYMAHw" target="_blank" class="underline font-bold">《不成熟的父母》</a>，挖掘理智与感受断层的原生家庭脚本，理解情绪压抑的形成机制；<br>
+                            - <strong>感受校准：</strong>查阅<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkzIaoT8YAYcA-AYMAHw" target="_blank" class="underline font-bold">《感受与认知》</a>，学习精准命名身体感受，修正大脑对生理信号的误判；<br>
+                            - <strong>知行衔接：</strong>结合<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkCrZxbtjAYcA-AYMAHw" target="_blank" class="underline font-bold">《传习录》</a>，将阳明心学的“知行合一”落地为日常行动，打破“道理懂做不到”的循环。`
+                };
 			} else if(score <= 25) {
-				res = { tag: "心智重建阶段：自我意识觉醒", bg: "bg-emerald-500 text-white", diag: "您已经具备了较强的自我觉察能力。您开始意识到情绪并不是外界强加给您的，而是您可以主动调节的。大部分时间里，您能保持清醒的边界感，不盲目卷入内耗。不过，旧有的思维惯性依然存在，在遇到重大挫折时，仍有可能会短暂地回到消极状态。", solve: "请记住，稳定的心态需要长期的生理习惯支撑。建议您通过持续的行动来巩固新的思维模式。坚持每日的身体调节练习，将偶尔的灵光一现转化为稳固的生活习惯。当新的神经连接变得强壮，您将彻底告别内耗。" };
+				res = { 
+                    tag: "心智重建阶段：算力重组期", 
+                    bg: "bg-emerald-500 text-white", 
+                    diag: "您已具备初步觉醒意识，能识别情绪的预测本质。大部分时间能维持边界，但由于旧的神经通路依然强壮，在突发冲突下仍有回弹风险。", 
+                    solve: `<strong>🛠️ 物理补丁（新通路加固）：</strong><br>
+                            1. <strong>锁定心流：</strong>运行<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkUeMuo9DAaEAmgbwAOc" target="_blank" class="underline font-bold">【Alpha-01：意识入局】</a>，将偶发的专注力转化为稳固的极致心流习惯。<br>
+                            2. <strong>物理激活：</strong>练习<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkI8vobNeAYcA-AYMAHw" target="_blank" class="underline font-bold">【循环过度换气：穿透麻木】</a>，快速改变血液含氧量，重塑大脑响应速度。<br><br>
+                            <strong>🚀 进阶指南：</strong><br>
+                            - <strong>哲学落地：</strong>研读<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkZa8aioxAYcA-AYMAHw" target="_blank" class="underline font-bold">《知行合一王阳明大全集》</a>，以“事上练”的核心思想，用物理行动覆盖旧有神经通路；<br>
+                            - <strong>防回弹机制：</strong>查阅<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkjAyPn2DAYcA-AYMAHw" target="_blank" class="underline font-bold">《迷走神经的疗愈力》</a>，构建生理层面的情绪稳定屏障，降低突发冲突下的回弹概率；<br>
+                            - <strong>创伤整合：</strong>参考<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkvzM3kpuAYcA-AYMAHw" target="_blank" class="underline font-bold">《不原谅也没关系》</a>，整合过往未处理的情绪创伤，强化新通路的稳定性。`
+                };
 			} else if(score <= 28) {
-				res = { tag: "高效协同状态：知行合一觉醒者", bg: "bg-blue-500 text-white", diag: "您的身心系统运行非常顺畅，内耗极低。您的本能欲望、情感需求与理智逻辑已经达成了高度的和谐，内心拥有强大的定力。您不再试图掌控不可控的事物，而是清晰地知道，真正的智慧在于与现实世界的积极互动和行动结果中。", solve: "您已经超越了绝大多数人的心智水平。建议您继续保持对身体状态（如睡眠、营养）的敏锐监测。继续通过精准的语言描述世界，通过果断的行动来持续优化您的思维逻辑，保持系统的巅峰运行。" };
+				res = { 
+                    tag: "知行合一：高效协同运行状态", 
+                    bg: "bg-blue-500 text-white", 
+                    diag: "您的系统运行极度顺畅，赤子之心稳坐C位。您清晰地知道智慧不仅在大脑里，更在于你与世界的身体交互中。您现在需要的是极限性能的微调。", 
+                    solve: `<strong>🛠️ 物理补丁（极限算力优化）：</strong><br>
+                            1. <strong>逻辑超频：</strong>在高压博弈前运行<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkvAlvihzAaEAmgbwAOc" target="_blank" class="underline font-bold">【Beta-01：逻辑超频】</a>，强行拉高神经元放电效率。<br>
+                            2. <strong>燃料加注：</strong>严格遵循<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkOauWgSmAaEAmgbwAOc" target="_blank" class="underline font-bold">【硬件燃料·科学食谱】</a>，通过牛肉与大豆补充多巴胺燃料流水线。<br><br>
+                            <strong>🚀 进阶指南：</strong><br>
+                            - <strong>高压试炼：</strong>进入<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkCO27VxcAYcA-AYMAHw" target="_blank" class="underline font-bold">《芒格之道》</a>或交易模块（<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkukhXG9YAYcA-AYMAHw" target="_blank" class="underline font-bold">缠论</a>/<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkSDGW1c8AYcA-AYMAHw" target="_blank" class="underline font-bold">段永平投资问答录</a>），在高频决策场景中测试心智韧性的极限；<br>
+                            - <strong>情绪精细化：</strong>查阅<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkbAahZXRAYcA-AYMAHw" target="_blank" class="underline font-bold">《我的痛苦有名字吗》</a>，细化对复杂情绪的识别与管理，提升系统响应的精准度；<br>
+                            - <strong>认知升维：</strong>研读<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAk6ZLPIaHAYcA-AYMAHw" target="_blank" class="underline font-bold">《粉红色柔软的学习者》</a>，突破认知边界，持续优化大脑的信息处理模式。`
+                };
 			} else {
 				confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-				res = { tag: "顶级玩家：生命体验掌控者", bg: "bg-purple-600 text-white", diag: "恭喜您，您已经掌握了心智运行的核心底层逻辑。您不再受困于过去的阴影，也不再被外界环境左右。您能够将呼吸、环境和行动转化为提升自我的武器。您已经从被动接受生活安排的受害者，进化为主动创造生命体验的顶层架构师。", solve: "作为顶级玩家，您已经不需要普通的心理建议。建议您保持现有的修行频率，在面临更大的人生挑战时，随时调用周遭的一切资源作为您的工具。继续探索生命认知的上限，实现更高维度的自我超越。" };
+				res = { 
+                    tag: "顶级玩家：生命体验掌控者", 
+                    bg: "bg-purple-600 text-white", 
+                    diag: "恭喜！您已掌握第一性原理，从受害者进化为人生剧本的架构师。您已学会将呼吸、环境和行动化作重塑现实的武器。整个系统的“修改权限”已交还到您的手中。", 
+                    solve: `<strong>🛠️ 物理补丁（自由协议）：</strong><br>
+                            您已无需固定补丁。请根据实时战况，灵活调取<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAk7eqT0sAAaEAmgbwAOc" target="_blank" class="underline font-bold">【Theta-02：直觉深潜】</a>探索灵感暗门，并配合书单进行高维重构。<br><br>
+                            <strong>🚀 进阶指南：</strong><br>
+                            - <strong>宇宙观锚定：</strong>研读<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkvLyyAg6AYcA-AYMAHw" target="_blank" class="underline font-bold">《穿越平行宇宙》</a>，以第一性原理重构对世界的认知，建立超越个体的稳定锚点；<br>
+                            - <strong>智慧沉淀：</strong>深度研读<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAk6JJKOGKAYcA-AYMAHw" target="_blank" class="underline font-bold">《穷查理宝典》</a>，将多元思维模型融入日常决策，实现认知与行动的终极协同；<br>
+                            - <strong>生命拓展：</strong>参考<a href="https://drive.weixin.qq.com/s?k=ANUAMAdsAAkxhBdLhbAYcA-AYMAHw" target="_blank" class="underline font-bold">《拥抱可能》</a>，突破自我设限，探索生命体验的更多维度，成为自身成长的持续架构师。`
+                };
 			}
 
 			document.getElementById('status-tag').innerText = res.tag;
 			document.getElementById('status-tag').className = `inline-block px-4 py-1 rounded-full text-[10px] font-bold tracking-widest mb-4 ${res.bg}`;
 			document.getElementById('diag-text').innerText = res.diag;
-			document.getElementById('solve-text').innerText = res.solve;
+			document.getElementById('solve-text').innerHTML = res.solve;
 			
-			// 【核心修复点 1】：调用时传入 4 个参数
 			pushToFeishu(score, res.tag, res.diag, res.solve);
 		}
 
-		// 【核心修复点 2】：函数定义接收 4 个参数
 		async function pushToFeishu(score, tag, diag, solve) {
-		    const bridgeUrl = "https://eourpinh6l190e0.m.pipedream.net";
-		    
-		    const payload = {
-		        "phone": globalUserPhone,
-		        "score": score,
-		        "tag": tag,
-		        "diag": diag,
-		        "solve": solve
-		    };
-		    
-		    // 移除 mode: 'no-cors'，改用标准 fetch
-		    fetch(bridgeUrl, {
-		        method: 'POST',
-		        headers: {
-		            'Content-Type': 'application/json' // 正式域名下必须显式声明
-		        },
-		        body: JSON.stringify(payload)
-		    })
-		    .then(response => console.log("数据同步状态:", response.status))
-		    .catch(error => console.error("同步失败，请检查网络或拦截插件:", error));
+			const bridgeUrl = "https://eourpinh6l190e0.m.pipedream.net";
+			const payload = { "phone": globalUserPhone, "score": score, "tag": tag, "diag": diag, "solve": solve };
+			fetch(bridgeUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 		}
 	</script>
 </body>
