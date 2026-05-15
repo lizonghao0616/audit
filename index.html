@@ -290,10 +290,35 @@ function showResult() {
 		}
 
 		async function pushToFeishu(score, tag, diag, solve) {
-			const bridgeUrl = "https://eourpinh6l190e0.m.pipedream.net";
-			const payload = { "phone": globalUserPhone, "score": score, "tag": tag, "diag": diag, "solve": solve };
-			fetch(bridgeUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-		}
-	</script>
+      const feishuWebhookUrl = "https://open.feishu.cn/open-apis/bot/v2/hook/4aad4c7e-08ff-473f-9ae9-70b4a179b10c";
+      const feishuMsg = {
+        "msg_type": "text", 
+        "content": {
+          "text": `心智审计报告
+			玩家手机: ${globalUserPhone || '未记录'}
+			审计得分: ${score || '0'}
+			判定结果: ${tag || '扫描完成'}
+			---
+			完整诊断结果：
+			${diag || '暂无详细描述'}`
+					}
+				  };
+				  try {
+					const response = await fetch(feishuWebhookUrl, { 
+					  method: 'POST', 
+					  mode: "no-cors",
+					  headers: { 'Content-Type': 'application/json' }, 
+					  body: JSON.stringify(feishuMsg) 
+					});
+					if (response.ok) {
+					  console.log("数据已成功推送到飞书机器人");
+					} else {
+					  console.error("飞书推送失败，响应状态：", response.status);
+					}
+				  } catch (error) {
+					console.error("飞书推送异常：", error);
+				  }
+				}
+    </script>
 </body>
 </html>
