@@ -289,36 +289,48 @@ function showResult() {
 			pushToFeishu(score, res.tag, res.diag, res.solve);
 		}
 
+		const FEISHU_WEBHOOK = "https://open.feishu.cn/open-apis/bot/v2/hook/4aad4c7e-08ff-473f-9ae9-70b4a179b10c";
+
 		async function pushToFeishu(score, tag, diag, solve) {
-      const feishuWebhookUrl = "https://open.feishu.cn/open-apis/bot/v2/hook/4aad4c7e-08ff-473f-9ae9-70b4a179b10c";
-      const feishuMsg = {
-        "msg_type": "text", 
-        "content": {
-          "text": `心智审计报告
-			玩家手机: ${globalUserPhone || '未记录'}
-			审计得分: ${score || '0'}
-			判定结果: ${tag || '扫描完成'}
-			---
-			完整诊断结果：
-			${diag || '暂无详细描述'}`
-					}
-				  };
-				  try {
-					const response = await fetch(feishuWebhookUrl, { 
-					  method: 'POST', 
-					  mode: "no-cors",
-					  headers: { 'Content-Type': 'application/json' }, 
-					  body: JSON.stringify(feishuMsg) 
-					});
-					if (response.ok) {
-					  console.log("数据已成功推送到飞书机器人");
-					} else {
-					  console.error("飞书推送失败，响应状态：", response.status);
-					}
-				  } catch (error) {
-					console.error("飞书推送异常：", error);
-				  }
-				}
+		  const body = JSON.stringify({
+			msg_type: "text",
+			content: {
+			  text: [
+				"心智审计报告",
+				"玩家手机: " + (globalUserPhone || "未记录"),
+				"审计得分: " + (score || "0"),
+				"判定结果: " + (tag || "扫描完成"),
+				"---",
+				"完整诊断结果：",
+				diag || "暂无详细描述"
+			  ].join("\n")
+			}
+		  });
+
+		  // no-cors 模式：不设 Content-Type，浏览器自动用 text/plain（简单请求）
+		  // 请求一定发得出，body 仍然是 JSON 格式，飞书能解析
+		  // PC 浏览器对此兼容性最好，无跨域拦截
+		  async function sendData() {
+			try {
+			  await fetch(FEISHU_WEBHOOK, {
+				method: "POST",
+				mode: "no-cors",
+				body: body,
+			  });
+			  console.log("✅ 已推送到飞书");
+			} catch (e) {
+			  console.warn("fetch 失败，改用 sendBeacon 兜底");
+			  try {
+				const blob = new Blob([body], { type: "text/plain" });
+				navigator.sendBeacon(FEISHU_WEBHOOK, blob);
+			  } catch (e2) {
+				console.error("❌ 全部推送方式均失败", e2);
+			  }
+			}
+		  }
+
+		  sendData();
+		}
     </script>
 </body>
 </html>
