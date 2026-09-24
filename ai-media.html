@@ -36,11 +36,22 @@
   .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
 
-  /* 暖色光斑 + 3D 粒子背景 */
-  .orb { position: fixed; border-radius: 50%; filter: blur(80px); opacity: .35; z-index: 0; pointer-events: none; }
-  .orb.o1 { width: 520px; height: 520px; left: -6%; top: -10%; background: radial-gradient(circle, rgba(224,80,42,.16), transparent 65%); }
-  .orb.o2 { width: 480px; height: 480px; right: -8%; top: 18%; background: radial-gradient(circle, rgba(201,162,39,.14), transparent 65%); }
-  .orb.o3 { width: 440px; height: 440px; left: 26%; bottom: -14%; background: radial-gradient(circle, rgba(232,131,90,.13), transparent 65%); }
+  /* 背景：暖色余晖光带 + 漂浮光斑 + 金色光尘粒子 */
+  .sky { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(120% 55% at 50% -12%, rgba(255,196,122,.30), transparent 60%),
+      radial-gradient(90% 50% at 88% 6%, rgba(224,80,42,.17), transparent 60%),
+      radial-gradient(80% 45% at 10% 14%, rgba(201,162,39,.16), transparent 60%);
+  }
+  .orb { position: fixed; border-radius: 50%; filter: blur(70px); z-index: 0; pointer-events: none; animation: drift 26s ease-in-out infinite alternate; }
+  .orb.o1 { width: 580px; height: 580px; left: -8%; top: -8%; background: radial-gradient(circle, rgba(255,183,77,.24), transparent 62%); }
+  .orb.o2 { width: 520px; height: 520px; right: -10%; top: 22%; background: radial-gradient(circle, rgba(224,80,42,.19), transparent 62%); animation-delay: -8s; }
+  .orb.o3 { width: 470px; height: 470px; left: 28%; bottom: -16%; background: radial-gradient(circle, rgba(255,213,128,.21), transparent 62%); animation-delay: -16s; }
+  @keyframes drift {
+    0% { transform: translate3d(0,0,0) scale(1); }
+    50% { transform: translate3d(4%, -3%, 0) scale(1.08); }
+    100% { transform: translate3d(-3%, 4%, 0) scale(0.96); }
+  }
   #aurora3d { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
   .wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 0 28px; }
@@ -108,6 +119,23 @@
     background: #fbece3; border-left: 3px solid var(--accent); line-height: 1.75; }
   .t-warn b { color: var(--accent-deep); }
 
+  /* 真实案例 */
+  .cases { margin-top: 22px; }
+  .cases > h4 { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 12px; }
+  .case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .case {
+    position: relative; display: flex; flex-direction: column; gap: 6px;
+    padding: 16px 18px; background: var(--bg); border: 1px solid var(--line-soft); border-radius: 4px;
+    text-decoration: none; color: inherit;
+    transition: transform .3s cubic-bezier(.16,1,.3,1), border-color .3s ease, box-shadow .3s ease;
+  }
+  .case:hover { transform: translateY(-3px); border-color: var(--tc, var(--accent)); box-shadow: 0 8px 22px rgba(42,33,25,.09); }
+  .case b { font-size: 14.5px; font-weight: 700; color: var(--ink); padding-right: 22px; }
+  .case span { font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
+  .case .ext { position: absolute; top: 16px; right: 14px; width: 14px; height: 14px; color: var(--tc, var(--accent)); opacity: .65; transition: opacity .3s ease; }
+  .case:hover .ext { opacity: 1; }
+  .case .ext svg { width: 100%; height: 100%; display: block; }
+
   /* ===== 收尾 ===== */
   .closing { margin-top: 40px; padding: 38px 40px; background: var(--ink); color: #f4eee2; border-radius: 6px; }
   .closing h3 { font-family: var(--serif); font-size: 26px; font-weight: 700; }
@@ -126,7 +154,7 @@
 
   @media (max-width: 720px) {
     .track { padding: 28px 22px 26px; }
-    .stats, .t-data, .t-cols { grid-template-columns: 1fr; }
+    .stats, .t-data, .t-cols, .case-grid { grid-template-columns: 1fr; }
     .t-head { flex-wrap: wrap; }
     .closing { padding: 28px 24px; }
   }
@@ -137,9 +165,10 @@
 </style>
 </head>
 <body>
-<div class="grain"></div>
+<div class="sky"></div>
 <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
 <canvas id="aurora3d"></canvas>
+<div class="grain"></div>
 
 <div class="wrap">
   <header class="hero">
@@ -187,6 +216,26 @@
           <p class="step"><b>做 1 条 30 秒 AI 短剧片段</b>，投到抖音 / 红果测完播与付费数据。</p>
         </div>
       </div>
+      <div class="cases">
+        <h4>真实案例 · 点击跳转</h4>
+        <div class="case-grid">
+          <a class="case" href="https://vv.lmtw.com/mzw/content/detail/id/253339" target="_blank" rel="noopener">
+            <b>《菩提临世》</b>
+            <span>首部登顶红果热播榜的非真人短剧，抖音播放 4.3 亿、红果收藏破 300 万</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://www.uisdc.com/six-viral-formulas" target="_blank" rel="noopener">
+            <b>《万妖图录传》</b>
+            <span>3 人核心团队系列剧，全系列累计播放破 60 亿、第九季热度 9494 万</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://www.thepaper.cn/newsDetail_forward_34116170" target="_blank" rel="noopener">
+            <b>《渡骸》</b>
+            <span>江西大三学生个人账号，首集 700 万浏览，四个月累计近 8000 万播放</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+      </div>
       <div class="t-warn"><b>避坑：</b>90% 团队不赚钱——制作成本降了九成，投流成本却翻倍，省下的制作费转手交给了买量。出路是「系列 IP 化 + 剧场账号」，别指望单剧暴富。</div>
     </section>
 
@@ -220,6 +269,26 @@
           <p>最适合零基础，日 1–2 小时起步，一台手机就能做。</p>
           <h4 style="margin-top:18px">第一步</h4>
           <p class="step"><b>定 1 个垂直选题，日更 1 条 AI 视频连发 7 天</b>，看哪类内容起量。</p>
+        </div>
+      </div>
+      <div class="cases">
+        <h4>真实案例 · 点击跳转</h4>
+        <div class="case-grid">
+          <a class="case" href="https://voice.newrank.cn/study/hot/EFCE34965A99C9BC" target="_blank" rel="noopener">
+            <b>阿盐《穿越山海经》</b>
+            <span>一人 AI 制作玄幻短片，一周抖音涨粉超 59 万，点赞 304 万</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://baike.baidu.com/item/%E5%91%BD%E6%AF%94%E6%A2%A6%E9%95%BF/68578384" target="_blank" rel="noopener">
+            <b>命比梦长《万物生》</b>
+            <span>架空神话世界观，单条抖音播放 5000 万+，提示词全部开源</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://baike.baidu.com/item/%E7%8E%9B%E7%8F%82%E5%A8%9C/66100287" target="_blank" rel="noopener">
+            <b>玛珂娜</b>
+            <span>AI 音乐鬼畜，B 站 48 万粉，《孤勇者·谷歌翻译 20 次》524 万播放</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
         </div>
       </div>
       <div class="t-warn"><b>避坑：</b>平台本身不给钱、纯播放分成天花板低。尽早从「流量」转向「IP / 带货 / 商单」，否则容易陷入日更却只赚几块钱的循环。</div>
@@ -256,6 +325,26 @@
           <p class="step"><b>用 AI 写 3 个开头（各 2000 字）</b>，投番茄 / 盐选测完读率。</p>
         </div>
       </div>
+      <div class="cases">
+        <h4>真实案例 · 点击跳转</h4>
+        <div class="case-grid">
+          <a class="case" href="https://zhuanlan.zhihu.com/p/1920888836436779647" target="_blank" rel="noopener">
+            <b>《全家大反派?可他们宠我上瘾啊》</b>
+            <span>番茄 AI 辅助，首秀首日 1336 元，累计收入 11629 元</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://zhuanlan.zhihu.com/p/2027556260657021835" target="_blank" rel="noopener">
+            <b>半年过稿 50 篇</b>
+            <span>AI 辅助短篇铺量，单篇均价从千字 30 涨到 70 元，月收过万</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://m.toutiao.com/w/1867942818768900/" target="_blank" rel="noopener">
+            <b>长篇闷声发财</b>
+            <span>番茄 + 起点双开，全勤奖 + 广告分成 + 打赏，月入 1.2 万</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+      </div>
       <div class="t-warn"><b>避坑：</b>2026 番茄封禁纯 AI 生成、需人工底稿，原创度必须 100%。长篇一致性是最大坑（角色漂移、逻辑断裂），AI 是放大器不是印钞机。</div>
     </section>
 
@@ -280,12 +369,12 @@
       <a href="https://post.smzdm.com/p/arzw08d7/" target="_blank" rel="noopener">什么值得买 · AI写小说真实数据</a> ·
       <a href="https://juejin.cn/post/7654804766796349440" target="_blank" rel="noopener">掘金 · AI网文变现指南</a>
     </div>
-    <div class="disc">说明：收入数据受题材、平台、运营能力影响差异极大，头部与平均之间隔着巨大的马太效应。以上仅供参考，不构成收益承诺——「能稳定赚钱的永远是少数」，理性入场。</div>
+    <div class="disc">说明：收入数据受题材、平台、运营能力影响差异极大，头部与平均之间隔着巨大的马太效应。以上仅供参考，不构成收益承诺——「能稳定赚钱的永远是少数」，理性入场。<br>案例均来自 2026 年公开报道（澎湃、新榜、界面、百度百科等），卡片可点击跳转原文；其中小说收益多为作者自述，请谨慎判断。</div>
   </footer>
 </div>
 
 <script>
-/* ===== 3D 暖色粒子背景 ===== */
+/* ===== 3D 金色光尘背景 ===== */
 (function () {
   var canvas = document.getElementById('aurora3d');
   if (!canvas) return;
@@ -302,29 +391,30 @@
   resize();
   window.addEventListener('resize', resize);
 
-  var N = Math.min(110, Math.max(60, Math.floor(window.innerWidth * window.innerHeight / 18000)));
-  var cols = ['224,80,42', '201,162,39', '242,193,78', '232,131,90'];
+  var N = Math.min(150, Math.max(90, Math.floor(window.innerWidth * window.innerHeight / 12000)));
+  var cols = ['255,183,77', '255,138,101', '255,213,128', '224,80,42', '242,193,78'];
   var stars = [];
   for (var i = 0; i < N; i++) {
     stars.push({
-      x: (Math.random() - 0.5) * 2.4,
-      y: (Math.random() - 0.5) * 1.6,
-      z: (Math.random() - 0.5) * 1.6,
+      x: (Math.random() - 0.5) * 2.6,
+      y: (Math.random() - 0.5) * 1.7,
+      z: (Math.random() - 0.5) * 1.7,
       c: cols[Math.floor(Math.random() * cols.length)],
-      r: 0.7 + Math.random() * 1.7,
+      r: 0.9 + Math.random() * 2.2,
       tw: Math.random() * Math.PI * 2,
-      tws: 0.5 + Math.random() * 1.2
+      tws: 0.5 + Math.random() * 1.4,
+      rise: 0.0006 + Math.random() * 0.0016
     });
   }
 
-  var rotY = 0, rotX = -0.22;
+  var rotY = 0, rotX = -0.18;
   var mx = 0, my = 0;
   window.addEventListener('mousemove', function (e) {
     mx = (e.clientX / window.innerWidth - 0.5) * 2;
     my = (e.clientY / window.innerHeight - 0.5) * 2;
   });
 
-  var FOV = 4.6;
+  var FOV = 4.4;
   function project(p, out) {
     var cosY = Math.cos(rotY), sinY = Math.sin(rotY);
     var x1 = p.x * cosY - p.z * sinY;
@@ -333,7 +423,7 @@
     var y1 = p.y * cosX - z1 * sinX;
     var z2 = p.y * sinX + z1 * cosX;
     var s = FOV / (FOV + z2 + 1.4);
-    var k = Math.min(W, H) * 0.36;
+    var k = Math.min(W, H) * 0.4;
     out.x = cx + x1 * s * k;
     out.y = cy + y1 * s * k;
     out.s = s;
@@ -343,15 +433,21 @@
 
   function draw() {
     ctx.clearRect(0, 0, W, H);
-    var tRotY = mx * 0.32;
-    var tRotX = -0.22 + my * 0.18;
-    rotY += (tRotY - rotY) * 0.04 + 0.0012;
-    rotX += (tRotX - rotX) * 0.04;
+    var tRotY = mx * 0.36;
+    var tRotX = -0.18 + my * 0.2;
+    rotY += (tRotY - rotY) * 0.05 + 0.0016;
+    rotX += (tRotX - rotX) * 0.05;
 
-    for (var i = 0; i < N; i++) { stars[i].tw += 0.016 * stars[i].tws; project(stars[i], proj[i]); }
+    for (var i = 0; i < N; i++) {
+      var st = stars[i];
+      st.tw += 0.02 * st.tws;
+      st.y += st.rise;
+      if (st.y > 0.85) { st.y = -0.85; }
+      project(st, proj[i]);
+    }
 
     ctx.lineWidth = 1;
-    var maxd = Math.min(W, H) * 0.09;
+    var maxd = Math.min(W, H) * 0.11;
     var maxd2 = maxd * maxd;
     for (var a = 0; a < N; a++) {
       for (var b = a + 1; b < N; b++) {
@@ -360,8 +456,8 @@
         var d2 = dx * dx + dy * dy;
         if (d2 < maxd2) {
           var d = Math.sqrt(d2);
-          var alpha = (1 - d / maxd) * 0.07 * ((pa.s + pb.s) * 0.5);
-          ctx.strokeStyle = 'rgba(176,116,52,' + alpha.toFixed(3) + ')';
+          var alpha = (1 - d / maxd) * 0.12 * ((pa.s + pb.s) * 0.5);
+          ctx.strokeStyle = 'rgba(214,150,60,' + alpha.toFixed(3) + ')';
           ctx.beginPath(); ctx.moveTo(pa.x, pa.y); ctx.lineTo(pb.x, pb.y); ctx.stroke();
         }
       }
@@ -369,15 +465,16 @@
 
     for (var q = 0; q < N; q++) {
       var pr = proj[q], st = stars[q];
-      var depth = Math.max(0.18, Math.min(1, pr.s));
-      var twinkle = 0.7 + 0.3 * Math.sin(st.tw);
-      var alpha = 0.10 + 0.22 * depth * twinkle;
-      var rr = st.r * depth * dpr * 1.4;
-      var g = ctx.createRadialGradient(pr.x, pr.y, 0, pr.x, pr.y, rr * 3);
+      var depth = Math.max(0.2, Math.min(1, pr.s));
+      var twinkle = 0.65 + 0.35 * Math.sin(st.tw);
+      var alpha = 0.16 + 0.38 * depth * twinkle;
+      var rr = st.r * depth * dpr * 1.6;
+      var g = ctx.createRadialGradient(pr.x, pr.y, 0, pr.x, pr.y, rr * 3.2);
       g.addColorStop(0, 'rgba(' + st.c + ',' + alpha.toFixed(3) + ')');
+      g.addColorStop(0.4, 'rgba(' + st.c + ',' + (alpha * 0.5).toFixed(3) + ')');
       g.addColorStop(1, 'rgba(' + st.c + ',0)');
       ctx.fillStyle = g;
-      ctx.beginPath(); ctx.arc(pr.x, pr.y, rr * 3, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(pr.x, pr.y, rr * 3.2, 0, Math.PI * 2); ctx.fill();
     }
     requestAnimationFrame(draw);
   }
@@ -431,6 +528,19 @@
   }, { threshold: 0.6 });
   nums.forEach(function (n) { io.observe(n); });
 })();
+
+/* ===== 外链跳转（webview 兼容） ===== */
+document.addEventListener('click', function (e) {
+  var a = e.target && e.target.closest ? e.target.closest('a') : null;
+  if (!a) return;
+  var href = a.getAttribute('href') || '';
+  if (href && /^https?:\/\//i.test(href)) {
+    e.preventDefault();
+    var opened = false;
+    try { opened = window.open(href, '_blank'); } catch (err) {}
+    if (!opened) { window.location.href = href; }
+  }
+});
 </script>
 </body>
 </html>
