@@ -65,6 +65,9 @@
   .nav-links { display: flex; gap: 28px; }
   .nav-links a { color: var(--muted); text-decoration: none; font-size: 13.5px; transition: color .2s ease; }
   .nav-links a:hover { color: var(--text); }
+  .nav-links a.nav-ext { color: var(--accent-2); }
+  .nav-links a.nav-ext:hover { color: #67e8f9; }
+  .nav-links a.nav-ext svg { width: 11px; height: 11px; vertical-align: -1px; margin-left: 3px; opacity: .75; }
 
   /* ===== 主体 ===== */
   main { position: relative; z-index: 3; max-width: 1140px; margin: 0 auto; padding: 0 32px; }
@@ -197,29 +200,6 @@
     background: rgba(251,191,36,.06); border-left: 2px solid var(--gold); }
   .p-warn b { color: var(--gold); }
 
-  /* ===== 自媒体赛道 ===== */
-  .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-  .media-card {
-    position: relative; padding: 28px 24px 24px; border-radius: 20px; overflow: hidden;
-    background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(16px);
-    transition: transform .35s var(--ease), border-color .3s ease;
-  }
-  .media-card:hover { transform: translateY(-4px); border-color: var(--line-strong); }
-  .media-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--mc, var(--accent)); opacity: .85; }
-  .media-card .m-ico { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
-    background: var(--glass); border: 1px solid var(--line); color: var(--mc, var(--violet)); margin-bottom: 16px; }
-  .media-card .m-ico svg { width: 21px; height: 21px; display: block; }
-  .media-card h3 { font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
-  .media-card .m-sub { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
-  .media-card .m-data { margin-top: 16px; padding: 12px 14px; border-radius: 10px; background: rgba(255,255,255,.03);
-    border: 1px solid var(--line); font-size: 12.5px; color: #cfe4ea; line-height: 1.7; }
-  .media-card .m-data b { color: var(--cyan); font-weight: 600; }
-  .media-card .m-row { margin-top: 12px; font-size: 12.5px; color: #c4c4cc; line-height: 1.7; }
-  .media-card .m-row b { color: var(--violet); font-weight: 600; }
-  .media-card .m-warn { margin-top: 12px; padding: 10px 13px; border-radius: 10px; font-size: 12px; color: #f0dcae;
-    background: rgba(251,191,36,.06); border-left: 2px solid var(--gold); line-height: 1.7; }
-  .media-card .m-warn b { color: var(--gold); }
-
   /* ===== 30 天 ===== */
   .week-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
   .week {
@@ -253,7 +233,7 @@
   .reveal.in { opacity: 1; transform: none; }
 
   @media (max-width: 860px) {
-    .map-grid, .path-grid, .why-grid, .media-grid { grid-template-columns: 1fr; }
+    .map-grid, .path-grid, .why-grid { grid-template-columns: 1fr; }
     .week-grid { grid-template-columns: repeat(2, 1fr); }
     .stats { grid-template-columns: repeat(2, 1fr); }
     .nav-links { display: none; }
@@ -282,8 +262,8 @@
     <a href="#map">岗位地图</a>
     <a href="#jobs">真实在招</a>
     <a href="#paths">转岗路径</a>
-    <a href="#media">自媒体</a>
     <a href="#plan">起步计划</a>
+    <a href="https://heart-entropy.kungfu-trader.com/ai-media.html" target="_blank" rel="noopener" class="nav-ext">副业赛道<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>
   </div>
 </nav>
 
@@ -428,48 +408,10 @@
     </div>
   </section>
 
-  <!-- 自媒体赛道 -->
-  <section id="media">
-    <div class="sec-head reveal">
-      <div class="sec-kicker">04 · Solo Media</div>
-      <h2>AI 自媒体赛道</h2>
-      <p>不打工，也能用 AI 做内容变现。三条个人就能上手的赛道，附 2026 真实数据与避坑——门槛低，但「能稳定赚到钱」的永远是少数，先看清再入场。</p>
-    </div>
-    <div class="media-grid">
-      <div class="media-card reveal" style="--mc:#f472b6">
-        <div class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
-        <h3>AI 短剧</h3>
-        <div class="m-sub">AI 生成剧本 + 分镜 + 画面 + 配音，做成竖屏短剧</div>
-        <div class="m-data">2026 市场规模预计 <b>400 亿</b>、用户 <b>6 亿</b>；播放破亿剧主创可分账 <b>100–500 万</b></div>
-        <div class="m-row"><b>变现</b>：平台五五分成 · 微信小程序时长激励（最高 100%）· TikTok 出海分账 · 广告商单</div>
-        <div class="m-row"><b>门槛</b>：懂「爽点节奏」的编导 / 剪辑 / 文案，画面交给 AI</div>
-        <div class="m-warn"><b>避坑</b>：90% 团队不赚钱——制作成本降了、投流成本却翻倍；出路是「系列 IP 化 + 剧场账号」，别指望单剧暴富。</div>
-      </div>
-      <div class="media-card reveal" data-delay="80" style="--mc:#22d3ee">
-        <div class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
-        <h3>AI 短视频</h3>
-        <div class="m-sub">AI 写文案 + 配音 + 生成画面，剪映合成日更账号</div>
-        <div class="m-data">抖音 AI 账号 2026 Q1 单季收入超去年全年；AI 创作者总收入同比 <b>+457%</b></div>
-        <div class="m-row"><b>变现</b>：流量分成（门槛最低）· 电商带货 CPS · 商单（30 秒 300–2000 元）· 知识付费 · 账号交易</div>
-        <div class="m-row"><b>门槛</b>：最适合零基础，日 1–2 小时起步，一台手机就能做</div>
-        <div class="m-warn"><b>避坑</b>：平台本身不给钱、纯播放分成天花板低；尽早从「流量」转向「IP / 带货 / 商单」。</div>
-      </div>
-      <div class="media-card reveal" data-delay="160" style="--mc:#a78bfa">
-        <div class="m-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-        <h3>AI 小说</h3>
-        <div class="m-sub">AI 辅助写网文——番茄长篇 + 知乎盐选短篇</div>
-        <div class="m-data">番茄稳定月入过万不足 <b>5%</b>；盐选 AI 投稿过稿率 <b>低于 10%</b></div>
-        <div class="m-row"><b>变现</b>：全勤奖 + 流量分成（番茄 2000–10000/月）· 盐选爆款单篇几万到十几万 · 买断 / 漫剧改编</div>
-        <div class="m-row"><b>门槛</b>：语言功底 + 会设计开头节奏；选对题材（都市重生 / 系统流 AI 更易掌握）</div>
-        <div class="m-warn"><b>避坑</b>：2026 番茄封禁纯 AI 生成、需人工底稿；长篇一致性是最大坑，AI 是放大器不是印钞机。</div>
-      </div>
-    </div>
-  </section>
-
   <!-- 30 天 -->
   <section id="plan">
     <div class="sec-head reveal">
-      <div class="sec-kicker">05 · 30-Day Plan</div>
+      <div class="sec-kicker">04 · 30-Day Plan</div>
       <h2>30 天起步清单</h2>
       <p>不管走哪条路径，前 4 周都能落地的动作。</p>
     </div>
@@ -484,7 +426,7 @@
   <!-- 为什么可行 -->
   <section id="why">
     <div class="sec-head reveal">
-      <div class="sec-kicker">06 · Why It Works</div>
+      <div class="sec-kicker">05 · Why It Works</div>
       <h2>为什么「转岗可行」</h2>
       <p>不是画饼，三条判断依据。</p>
     </div>
