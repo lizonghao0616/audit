@@ -129,12 +129,46 @@
     text-decoration: none; color: inherit;
     transition: transform .3s cubic-bezier(.16,1,.3,1), border-color .3s ease, box-shadow .3s ease;
   }
-  .case:hover { transform: translateY(-3px); border-color: var(--tc, var(--accent)); box-shadow: 0 8px 22px rgba(42,33,25,.09); }
+  .case:hover { transform: translateY(-3px); border-color: var(--tc, var(--accent)); box-shadow: 0 8px 22px rgba(0,0,0,.45); }
   .case b { font-size: 14.5px; font-weight: 700; color: var(--ink); padding-right: 22px; }
   .case span { font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; }
   .case .ext { position: absolute; top: 16px; right: 14px; width: 14px; height: 14px; color: var(--tc, var(--accent)); opacity: .65; transition: opacity .3s ease; }
   .case:hover .ext { opacity: 1; }
   .case .ext svg { width: 100%; height: 100%; display: block; }
+
+  /* 新增区块：工具箱 / 收入真相 / 7天流程 / 避坑 */
+  .sec { margin-top: 56px; }
+  .sec-head { margin-bottom: 24px; }
+  .sec-head .kicker { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); }
+  .sec-head h2 { font-family: var(--serif); font-size: clamp(26px, 4vw, 34px); font-weight: 700; margin-top: 8px; letter-spacing: -.01em; }
+  .sec-head p { margin-top: 10px; font-size: 14.5px; color: var(--ink-soft); max-width: 680px; }
+
+  .tool-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .tool { padding: 22px 22px; background: var(--card); border: 1px solid var(--line-soft); border-radius: 6px; }
+  .tool h3 { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--tc, var(--accent)); }
+  .tool .tl { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tool .tl span { padding: 6px 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 999px; font-size: 12px; color: var(--ink-soft); }
+
+  .truth { padding: 32px 34px; background: var(--card); border: 1px solid var(--line-soft); border-radius: 6px; }
+  .truth-row { display: flex; align-items: center; gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--line-soft); }
+  .truth-row:last-child { border-bottom: none; }
+  .truth-row .t-label { flex-shrink: 0; width: 210px; font-size: 13.5px; color: var(--ink-soft); }
+  .truth-row .t-label b { color: var(--ink); }
+  .t-bar { flex: 1; height: 18px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+  .t-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), #e6ba74); border-radius: 3px; }
+  .truth-row .t-pct { flex-shrink: 0; width: 90px; font-family: var(--serif); font-size: 15px; font-weight: 700; color: var(--accent); text-align: right; }
+
+  .plan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .plan-step { padding: 22px 22px; background: var(--card); border: 1px solid var(--line-soft); border-radius: 6px; border-top: 3px solid var(--accent); }
+  .plan-step .p-day { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; }
+  .plan-step h3 { font-family: var(--serif); font-size: 18px; font-weight: 700; margin-top: 8px; }
+  .plan-step p { margin-top: 8px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.7; }
+
+  .myths { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .myth { padding: 18px 20px; background: rgba(201,162,90,.05); border: 1px solid var(--line-soft); border-radius: 6px; }
+  .myth h3 { font-size: 14.5px; font-weight: 700; color: var(--ink); }
+  .myth p { margin-top: 6px; font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+  .myth h3::before { content: "× "; color: var(--accent); }
 
   /* ===== 收尾 ===== */
   .closing { margin-top: 40px; padding: 38px 40px; background: linear-gradient(135deg, #c9a25a, #a8864a); color: #16120a; border-radius: 6px; }
@@ -144,6 +178,7 @@
   .closing .tip span { padding: 8px 14px; border: 1px solid rgba(22,18,10,.3); border-radius: 999px; font-size: 12.5px; color: #2b2312; }
 
   footer { padding: 30px 0 60px; font-size: 12px; color: var(--ink-faint); line-height: 2; }
+  footer .brand { font-family: var(--serif); font-size: 15px; font-weight: 700; letter-spacing: .5px; color: var(--accent); margin-bottom: 12px; }
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
   footer .disc { margin-top: 10px; font-size: 11.5px; line-height: 1.8; }
@@ -154,9 +189,12 @@
 
   @media (max-width: 720px) {
     .track { padding: 28px 22px 26px; }
-    .stats, .t-data, .t-cols, .case-grid { grid-template-columns: 1fr; }
+    .stats, .t-data, .t-cols, .case-grid, .tool-grid, .plan-grid, .myths { grid-template-columns: 1fr; }
     .t-head { flex-wrap: wrap; }
     .closing { padding: 28px 24px; }
+    .truth { padding: 24px 20px; }
+    .truth-row { flex-wrap: wrap; gap: 8px; }
+    .truth-row .t-label { width: 100%; }
   }
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
@@ -172,7 +210,7 @@
 
 <div class="wrap">
   <header class="hero">
-    <div class="eyebrow reveal">2026 · 内容变现指南</div>
+    <div class="eyebrow reveal">董可人 AI 课程 · 内容变现指南</div>
     <h1 class="reveal" data-delay="60">AI <em>副业</em>赛道</h1>
     <p class="sub reveal" data-delay="120">不打工，用 AI 做<b>短剧、短视频、小说</b>三条内容赛道变现。门槛低，但「能稳定赚到钱的永远是少数」——先把真实数据和坑看清楚，再决定要不要入场。</p>
     <div class="rule reveal" data-delay="160"></div>
@@ -274,9 +312,9 @@
       <div class="cases">
         <h4>真实案例 · 点击跳转</h4>
         <div class="case-grid">
-          <a class="case" href="https://voice.newrank.cn/study/hot/EFCE34965A99C9BC" target="_blank" rel="noopener">
+          <a class="case" href="https://view.inews.qq.com/k/20260701A04I4X00?scene=wap&no-redirect=1" target="_blank" rel="noopener">
             <b>阿盐《穿越山海经》</b>
-            <span>一人 AI 制作玄幻短片，一周抖音涨粉超 59 万，点赞 304 万</span>
+            <span>一人 AI 制作玄幻短片，6 天涨粉 60 万，点赞超 300 万</span>
             <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
           </a>
           <a class="case" href="https://baike.baidu.com/item/%E5%91%BD%E6%AF%94%E6%A2%A6%E9%95%BF/68578384" target="_blank" rel="noopener">
@@ -328,24 +366,103 @@
       <div class="cases">
         <h4>真实案例 · 点击跳转</h4>
         <div class="case-grid">
-          <a class="case" href="https://zhuanlan.zhihu.com/p/1920888836436779647" target="_blank" rel="noopener">
-            <b>《全家大反派?可他们宠我上瘾啊》</b>
-            <span>番茄 AI 辅助，首秀首日 1336 元，累计收入 11629 元</span>
+          <a class="case" href="https://m.thepaper.cn/newsDetail_forward_32730943" target="_blank" rel="noopener">
+            <b>AI 侵袭网文圈</b>
+            <span>编辑四成收稿来自 AI，番茄首秀新书同比涨 1302%</span>
             <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
           </a>
-          <a class="case" href="https://zhuanlan.zhihu.com/p/2027556260657021835" target="_blank" rel="noopener">
-            <b>半年过稿 50 篇</b>
-            <span>AI 辅助短篇铺量，单篇均价从千字 30 涨到 70 元，月收过万</span>
+          <a class="case" href="https://post.smzdm.com/p/arzw08d7/" target="_blank" rel="noopener">
+            <b>150 万字只赚 1805 元</b>
+            <span>真实分布：80-90% 作者月入 0-几十元，1-2% 月入千元以上</span>
             <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
           </a>
-          <a class="case" href="https://m.toutiao.com/w/1867942818768900/" target="_blank" rel="noopener">
-            <b>长篇闷声发财</b>
-            <span>番茄 + 起点双开，全勤奖 + 广告分成 + 打赏，月入 1.2 万</span>
+          <a class="case" href="https://post.smzdm.com/p/a4qw69ow/" target="_blank" rel="noopener">
+            <b>612 亿市场，作者自证是人</b>
+            <span>番茄两月处置低质 AI 书超 30 万本、855 个账号被处罚</span>
             <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
           </a>
         </div>
       </div>
       <div class="t-warn"><b>避坑：</b>2026 番茄封禁纯 AI 生成、需人工底稿，原创度必须 100%。长篇一致性是最大坑（角色漂移、逻辑断裂），AI 是放大器不是印钞机。</div>
+    </section>
+
+    <!-- 工具箱 -->
+    <section class="sec reveal">
+      <div class="sec-head">
+        <div class="kicker">04 · AI Toolkit</div>
+        <h2>一条赛道配一套工具</h2>
+        <p>工具都是现成的，不用从零学。核心是「人做判断，AI 做执行」——选题、节奏、审美由你把关，重复劳动交给 AI。</p>
+      </div>
+      <div class="tool-grid">
+        <div class="tool" style="--tc:#c9a25a">
+          <h3>AI 短剧</h3>
+          <div class="tl"><span>可灵 Kling</span><span>即梦 Dreamina</span><span>Sora</span><span>Runway</span><span>海螺 AI</span></div>
+        </div>
+        <div class="tool" style="--tc:#8aa99a">
+          <h3>AI 短视频</h3>
+          <div class="tl"><span>剪映</span><span>即梦</span><span>Midjourney</span><span>Suno</span><span>Dify</span></div>
+        </div>
+        <div class="tool" style="--tc:#b8893e">
+          <h3>AI 小说</h3>
+          <div class="tl"><span>DeepSeek</span><span>豆包</span><span>Claude</span><span>星月写作</span><span>Notion</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 收入真相 -->
+    <section class="sec reveal">
+      <div class="sec-head">
+        <div class="kicker">05 · The Real Numbers</div>
+        <h2>收入真相：金字塔长这样</h2>
+        <p>别被「月入过万」的截图带偏。把真实分布摊开看，才知道自己大概站在哪一层。</p>
+      </div>
+      <div class="truth">
+        <div class="truth-row"><div class="t-label"><b>月入 0～几十元</b> 绝大多数人</div><div class="t-bar"><i style="width:90%"></i></div><div class="t-pct">80–90%</div></div>
+        <div class="truth-row"><div class="t-label"><b>月入 50～500 元</b> 小有起色</div><div class="t-bar"><i style="width:14%"></i></div><div class="t-pct">8–15%</div></div>
+        <div class="truth-row"><div class="t-label"><b>月入 1000～5000+</b> 稳定变现</div><div class="t-bar"><i style="width:2%"></i></div><div class="t-pct">1–2%</div></div>
+        <div class="truth-row"><div class="t-label"><b>月入数万～几十万</b> 头部爆款</div><div class="t-bar"><i style="width:0.6%"></i></div><div class="t-pct">&lt;1%</div></div>
+      </div>
+    </section>
+
+    <!-- 7天启动 -->
+    <section class="sec reveal">
+      <div class="sec-head">
+        <div class="kicker">06 · 7-Day Start</div>
+        <h2>新手 7 天启动清单</h2>
+        <p>不用准备三个月，先用一周跑通「选题 → 作品 → 数据」的最小闭环。</p>
+      </div>
+      <div class="plan-grid">
+        <div class="plan-step">
+          <div class="p-day">Day 1–2</div>
+          <h3>定赛道 + 选工具</h3>
+          <p>三选一，顺手最重要。注册对应 AI 工具，扒 5 个同赛道头部账号，拆它们的选题和开头。</p>
+        </div>
+        <div class="plan-step">
+          <div class="p-day">Day 3–5</div>
+          <h3>做出第一条作品</h3>
+          <p>别追求完美，做一条 30 秒～3 分钟的成品。重点打磨「前 3 秒」和「结尾钩子」。</p>
+        </div>
+        <div class="plan-step">
+          <div class="p-day">Day 6–7</div>
+          <h3>发布 + 看数据</h3>
+          <p>投到对应平台，记录完播率 / 点击率 / 收藏。数据说话：起量就加更，没量就换选题再试。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 避坑清单 -->
+    <section class="sec reveal">
+      <div class="sec-head">
+        <div class="kicker">07 · Avoid These</div>
+        <h2>别踩这四个坑</h2>
+        <p>大多数新人不是输在能力，而是输在认知偏差。</p>
+      </div>
+      <div class="myths">
+        <div class="myth"><h3>一上来就买课 / 买会员</h3><p>先用手头免费工具跑通一条作品再谈投入。工具不决定成败，选题和节奏才决定。</p></div>
+        <div class="myth"><h3>迷信「月入过万」截图</h3><p>这类截图多为卖课引流，真实收益远低于宣传。看平台官方数据和反例，比看海报靠谱。</p></div>
+        <div class="myth"><h3>纯 AI 生成不修改就发</h3><p>番茄等平台已封禁纯 AI 内容、要求人工底稿。AI 是放大器，放大的是你的准备质量。</p></div>
+        <div class="myth"><h3>单条爆款就 All in</h3><p>爆款率不足 1%，把宝押在单部作品上是赌博。稳定的是「系列 IP 化 + 账号化」的细水长流。</p></div>
+      </div>
     </section>
 
     <div class="closing reveal">
@@ -361,11 +478,12 @@
   </main>
 
   <footer class="reveal">
+    <div class="brand">董可人 AI 课程 · 系列福利资料</div>
     <div class="src">
       数据来源（2026 年公开报道汇总，具体以平台最新政策为准）：
       <a href="https://www.jiemian.com/article/14586635.html" target="_blank" rel="noopener">界面 · AI短剧谁在赚钱</a> ·
       <a href="https://m.pedaily.cn/news/569569" target="_blank" rel="noopener">投资界 · AI短剧反杀</a> ·
-      <a href="https://zhuanlan.zhihu.com/p/2082886907252438892" target="_blank" rel="noopener">知乎 · AI自媒体赚钱时代</a> ·
+      <a href="https://m.thepaper.cn/newsDetail_forward_33200194" target="_blank" rel="noopener">澎湃 · 最火的 AI 博主在赚钱了吗</a> ·
       <a href="https://post.smzdm.com/p/arzw08d7/" target="_blank" rel="noopener">什么值得买 · AI写小说真实数据</a> ·
       <a href="https://juejin.cn/post/7654804766796349440" target="_blank" rel="noopener">掘金 · AI网文变现指南</a>
     </div>
