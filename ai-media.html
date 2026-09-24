@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 副业赛道 · 内容变现指南</title>
+<style>
+  :root {
+    --bg: #f4eee2;
+    --card: #fffcf4;
+    --ink: #26201a;
+    --ink-soft: #5f5447;
+    --ink-faint: #9a8c78;
+    --line: #e2d6c1;
+    --line-soft: #ede4d2;
+    --accent: #e0502a;
+    --accent-deep: #c13f1c;
+    --green: #2f7d5d;
+    --gold: #c9a227;
+    --shadow: 0 1px 2px rgba(42,33,25,.04), 0 10px 30px rgba(42,33,25,.07);
+    --serif: Georgia, "Songti SC", "STSong", "SimSun", serif;
+    --sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* 纸张纹理 */
+  .grain { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
+
+  .wrap { position: relative; z-index: 1; max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+
+  /* ===== Hero ===== */
+  .hero { padding: 92px 0 40px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent);
+  }
+  .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--accent); }
+  h1 {
+    font-family: var(--serif); font-size: clamp(46px, 9vw, 88px); font-weight: 700;
+    letter-spacing: -.01em; line-height: 1.02; margin-top: 20px;
+  }
+  h1 em { font-style: normal; color: var(--accent); }
+  .sub { margin-top: 22px; font-size: 17px; color: var(--ink-soft); max-width: 620px; }
+  .sub b { color: var(--ink); font-weight: 600; }
+  .rule { margin-top: 34px; height: 3px; background: var(--ink); width: 56px; }
+
+  /* 关键数字 */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
+  .stat { padding: 20px 22px; background: var(--card); border: 1px solid var(--line-soft); box-shadow: var(--shadow); border-radius: 4px; }
+  .stat b { display: block; font-family: var(--serif); font-size: 34px; font-weight: 700; letter-spacing: -.02em; color: var(--ink); }
+  .stat b em { font-style: normal; color: var(--accent); }
+  .stat span { font-size: 12.5px; color: var(--ink-faint); letter-spacing: .3px; }
+
+  /* ===== 赛道 ===== */
+  .tracks { padding: 40px 0 0; }
+  .track {
+    position: relative; margin-bottom: 26px; padding: 40px 40px 34px;
+    background: var(--card); border: 1px solid var(--line-soft); box-shadow: var(--shadow); border-radius: 6px;
+    transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease;
+  }
+  .track:hover { transform: translateY(-3px); box-shadow: 0 2px 4px rgba(42,33,25,.04), 0 18px 44px rgba(42,33,25,.10); }
+  .track::before { content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--tc, var(--accent)); border-radius: 6px 0 0 6px; }
+
+  .t-head { display: flex; align-items: flex-start; gap: 22px; }
+  .t-no { font-family: var(--serif); font-size: 44px; font-weight: 700; line-height: 1; color: var(--line); letter-spacing: -.02em; }
+  .t-title { flex: 1; }
+  .t-title h2 { font-family: var(--serif); font-size: 30px; font-weight: 700; letter-spacing: -.01em; }
+  .t-title .t-tag { font-size: 13.5px; color: var(--ink-soft); margin-top: 5px; }
+  .t-ico { flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: var(--bg); border: 1px solid var(--line); color: var(--tc, var(--accent)); }
+  .t-ico svg { width: 22px; height: 22px; display: block; }
+
+  /* 数据条 */
+  .t-data { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 26px; }
+  .d { padding: 16px 18px; background: var(--bg); border: 1px solid var(--line-soft); border-radius: 4px; }
+  .d b { display: block; font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--tc, var(--accent)); letter-spacing: -.01em; }
+  .d span { font-size: 12px; color: var(--ink-faint); }
+
+  /* 两栏 */
+  .t-cols { display: grid; grid-template-columns: 1.15fr 1fr; gap: 30px; margin-top: 26px; }
+  .col h4 { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .col ul { list-style: none; }
+  .col ul li { position: relative; padding-left: 18px; font-size: 14px; color: var(--ink-soft); margin-top: 8px; }
+  .col ul li::before { content: ""; position: absolute; left: 0; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--tc, var(--accent)); opacity: .5; }
+  .col ul li b { color: var(--ink); font-weight: 600; }
+  .col p { font-size: 14px; color: var(--ink-soft); }
+  .step { margin-top: 6px; padding: 13px 15px; background: var(--bg); border-left: 3px solid var(--green); border-radius: 3px; font-size: 13.5px !important; color: var(--ink) !important; }
+  .step b { color: var(--green); }
+
+  .t-warn { margin-top: 22px; padding: 14px 17px; border-radius: 4px; font-size: 13.5px; color: #7a3b1f;
+    background: #fbece3; border-left: 3px solid var(--accent); line-height: 1.75; }
+  .t-warn b { color: var(--accent-deep); }
+
+  /* ===== 收尾 ===== */
+  .closing { margin-top: 40px; padding: 38px 40px; background: var(--ink); color: #f4eee2; border-radius: 6px; }
+  .closing h3 { font-family: var(--serif); font-size: 26px; font-weight: 700; }
+  .closing p { margin-top: 12px; font-size: 14.5px; color: #c9bdab; max-width: 640px; }
+  .closing .tip { margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .closing .tip span { padding: 8px 14px; border: 1px solid rgba(244,238,226,.22); border-radius: 999px; font-size: 12.5px; color: #e9dfcc; }
+
+  footer { padding: 30px 0 60px; font-size: 12px; color: var(--ink-faint); line-height: 2; }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer .disc { margin-top: 10px; font-size: 11.5px; line-height: 1.8; }
+
+  /* 进场 */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 720px) {
+    .track { padding: 28px 22px 26px; }
+    .stats, .t-data, .t-cols { grid-template-columns: 1fr; }
+    .t-head { flex-wrap: wrap; }
+    .closing { padding: 28px 24px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow reveal">2026 · 内容变现指南</div>
+    <h1 class="reveal" data-delay="60">AI <em>副业</em>赛道</h1>
+    <p class="sub reveal" data-delay="120">不打工，用 AI 做<b>短剧、短视频、小说</b>三条内容赛道变现。门槛低，但「能稳定赚到钱的永远是少数」——先把真实数据和坑看清楚，再决定要不要入场。</p>
+    <div class="rule reveal" data-delay="160"></div>
+    <div class="stats">
+      <div class="stat reveal" data-delay="200"><b><em data-count="400" data-suffix=" 亿">0 亿</em></b><span>2026 AI 短剧市场规模（预计）</span></div>
+      <div class="stat reveal" data-delay="260"><b><em data-count="457" data-prefix="+" data-suffix="%">0%</em></b><span>抖音 AI 创作者收入同比增速</span></div>
+      <div class="stat reveal" data-delay="320"><b><em data-count="5" data-prefix="&lt;" data-suffix="%">0%</em></b><span>番茄稳定月入过万的 AI 作者占比</span></div>
+    </div>
+  </header>
+
+  <main class="tracks">
+    <!-- 01 AI 短剧 -->
+    <section class="track reveal" style="--tc:#e0502a">
+      <div class="t-head">
+        <span class="t-no">01</span>
+        <div class="t-title">
+          <h2>AI 短剧</h2>
+          <div class="t-tag">AI 生成剧本 + 分镜 + 画面 + 配音，做成竖屏短剧</div>
+        </div>
+        <div class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg></div>
+      </div>
+      <div class="t-data">
+        <div class="d"><b>400 亿</b><span>2026 市场规模预计</span></div>
+        <div class="d"><b>6 亿</b><span>用户规模</span></div>
+        <div class="d"><b>100–500 万</b><span>破亿剧主创分账</span></div>
+      </div>
+      <div class="t-cols">
+        <div class="col">
+          <h4>变现方式</h4>
+          <ul>
+            <li><b>平台五五分成</b> — 平台出 IP 与投流，你出内容，播放收益分账</li>
+            <li><b>微信小程序时长激励</b> — 按观看时长分档，最高 100% 收入激励</li>
+            <li><b>TikTok 出海分账</b> — 承制 + 广告分账，季度分成超 200 万美元</li>
+            <li><b>广告商单</b> — 头部账号单条商单可达数万到 25 万</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>门槛 · 适合谁</h4>
+          <p>懂「爽点节奏」的编导 / 剪辑 / 文案，画面与配音交给 AI（可灵、即梦、Sora 等）。</p>
+          <h4 style="margin-top:18px">第一步</h4>
+          <p class="step"><b>做 1 条 30 秒 AI 短剧片段</b>，投到抖音 / 红果测完播与付费数据。</p>
+        </div>
+      </div>
+      <div class="t-warn"><b>避坑：</b>90% 团队不赚钱——制作成本降了九成，投流成本却翻倍，省下的制作费转手交给了买量。出路是「系列 IP 化 + 剧场账号」，别指望单剧暴富。</div>
+    </section>
+
+    <!-- 02 AI 短视频 -->
+    <section class="track reveal" style="--tc:#2f7d5d">
+      <div class="t-head">
+        <span class="t-no">02</span>
+        <div class="t-title">
+          <h2>AI 短视频</h2>
+          <div class="t-tag">AI 写文案 + 配音 + 生成画面，剪映合成日更账号</div>
+        </div>
+        <div class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+      </div>
+      <div class="t-data">
+        <div class="d"><b>+457%</b><span>AI 创作者收入同比增速</span></div>
+        <div class="d"><b>+718%</b><span>实现变现的创作者增长</span></div>
+        <div class="d"><b>400 万+</b><span>头部账号三个月变现</span></div>
+      </div>
+      <div class="t-cols">
+        <div class="col">
+          <h4>变现方式</h4>
+          <ul>
+            <li><b>平台流量分成</b> — 门槛最低，抖音 / 视频号 / B 站按播放给钱</li>
+            <li><b>电商带货 CPS</b> — 视频挂购物车赚佣金，不用囤货</li>
+            <li><b>商单广告</b> — 一条 30 秒产品视频 300–2000 元</li>
+            <li><b>知识付费 / 账号交易</b> — 收徒、卖课、卖号</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>门槛 · 适合谁</h4>
+          <p>最适合零基础，日 1–2 小时起步，一台手机就能做。</p>
+          <h4 style="margin-top:18px">第一步</h4>
+          <p class="step"><b>定 1 个垂直选题，日更 1 条 AI 视频连发 7 天</b>，看哪类内容起量。</p>
+        </div>
+      </div>
+      <div class="t-warn"><b>避坑：</b>平台本身不给钱、纯播放分成天花板低。尽早从「流量」转向「IP / 带货 / 商单」，否则容易陷入日更却只赚几块钱的循环。</div>
+    </section>
+
+    <!-- 03 AI 小说 -->
+    <section class="track reveal" style="--tc:#c9a227">
+      <div class="t-head">
+        <span class="t-no">03</span>
+        <div class="t-title">
+          <h2>AI 小说</h2>
+          <div class="t-tag">AI 辅助写网文——番茄长篇 + 知乎盐选短篇</div>
+        </div>
+        <div class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+      </div>
+      <div class="t-data">
+        <div class="d"><b>&lt;5%</b><span>番茄稳定月入过万占比</span></div>
+        <div class="d"><b>&lt;10%</b><span>盐选 AI 投稿过稿率</span></div>
+        <div class="d"><b>2000–1 万</b><span>番茄稳定后单月收益</span></div>
+      </div>
+      <div class="t-cols">
+        <div class="col">
+          <h4>变现方式</h4>
+          <ul>
+            <li><b>全勤奖 + 流量分成</b> — 番茄长篇，稳定后月 2000–10000 元</li>
+            <li><b>盐选短篇分成</b> — 单篇上限高，爆款几万到十几万</li>
+            <li><b>买断 / 改编</b> — 漫剧、有声书等二次变现</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>门槛 · 适合谁</h4>
+          <p>语言功底 + 会设计开头节奏；选对题材（都市重生 / 系统流 AI 更易掌握）。</p>
+          <h4 style="margin-top:18px">第一步</h4>
+          <p class="step"><b>用 AI 写 3 个开头（各 2000 字）</b>，投番茄 / 盐选测完读率。</p>
+        </div>
+      </div>
+      <div class="t-warn"><b>避坑：</b>2026 番茄封禁纯 AI 生成、需人工底稿，原创度必须 100%。长篇一致性是最大坑（角色漂移、逻辑断裂），AI 是放大器不是印钞机。</div>
+    </section>
+
+    <div class="closing reveal">
+      <h3>先选一条，跑 7 天再下结论</h3>
+      <p>三条赛道的共同点是：工具不决定成败，<b style="color:#f4eee2">选题 + 开头节奏 + 数据测试</b>才决定。别一上来就投钱买课，先用最小成本做出一条作品，看真实数据反馈。</p>
+      <div class="tip">
+        <span>① 选最顺手的一条</span>
+        <span>② 先做 1 条作品</span>
+        <span>③ 发出去看数据</span>
+        <span>④ 数据说话再投入</span>
+      </div>
+    </div>
+  </main>
+
+  <footer class="reveal">
+    <div class="src">
+      数据来源（2026 年公开报道汇总，具体以平台最新政策为准）：
+      <a href="https://www.jiemian.com/article/14586635.html" target="_blank" rel="noopener">界面 · AI短剧谁在赚钱</a> ·
+      <a href="https://m.pedaily.cn/news/569569" target="_blank" rel="noopener">投资界 · AI短剧反杀</a> ·
+      <a href="https://zhuanlan.zhihu.com/p/2082886907252438892" target="_blank" rel="noopener">知乎 · AI自媒体赚钱时代</a> ·
+      <a href="https://post.smzdm.com/p/arzw08d7/" target="_blank" rel="noopener">什么值得买 · AI写小说真实数据</a> ·
+      <a href="https://juejin.cn/post/7654804766796349440" target="_blank" rel="noopener">掘金 · AI网文变现指南</a>
+    </div>
+    <div class="disc">说明：收入数据受题材、平台、运营能力影响差异极大，头部与平均之间隔着巨大的马太效应。以上仅供参考，不构成收益承诺——「能稳定赚钱的永远是少数」，理性入场。</div>
+  </footer>
+</div>
+
+<script>
+/* ===== 滚动进场 ===== */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        var d = en.target.getAttribute('data-delay') || 0;
+        en.target.style.transitionDelay = d + 'ms';
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (e) { io.observe(e); });
+})();
+
+/* ===== 数字滚动 ===== */
+(function () {
+  var nums = document.querySelectorAll('[data-count]');
+  if (!('IntersectionObserver' in window)) {
+    nums.forEach(function (n) {
+      n.textContent = (n.getAttribute('data-prefix') || '') + n.getAttribute('data-count') + n.getAttribute('data-suffix');
+    });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      var el = en.target;
+      var target = parseFloat(el.getAttribute('data-count'));
+      var prefix = el.getAttribute('data-prefix') || '';
+      var suffix = el.getAttribute('data-suffix') || '';
+      var t0 = null, dur = 1100;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / dur);
+        var e = 1 - Math.pow(1 - k, 3);
+        el.textContent = prefix + Math.round(target * e) + suffix;
+        if (k < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.6 });
+  nums.forEach(function (n) { io.observe(n); });
+})();
+</script>
+</body>
+</html>
