@@ -170,6 +170,11 @@
   .myth p { margin-top: 6px; font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
   .myth h3::before { content: "× "; color: var(--accent); }
 
+  .ladder { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+  .ladder .lad { padding: 12px 14px; background: var(--bg); border: 1px solid var(--line-soft); border-radius: 4px; }
+  .ladder .lad b { display: block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--tc, var(--accent)); }
+  .ladder .lad span { display: block; margin-top: 5px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.6; }
+
   /* ===== 收尾 ===== */
   .closing { margin-top: 40px; padding: 38px 40px; background: linear-gradient(135deg, #c9a25a, #a8864a); color: #16120a; border-radius: 6px; }
   .closing h3 { font-family: var(--serif); font-size: 26px; font-weight: 700; }
@@ -189,7 +194,7 @@
 
   @media (max-width: 720px) {
     .track { padding: 28px 22px 26px; }
-    .stats, .t-data, .t-cols, .case-grid, .tool-grid, .plan-grid, .myths { grid-template-columns: 1fr; }
+    .stats, .t-data, .t-cols, .case-grid, .tool-grid, .plan-grid, .myths, .ladder { grid-template-columns: 1fr; }
     .t-head { flex-wrap: wrap; }
     .closing { padding: 28px 24px; }
     .truth { padding: 24px 20px; }
@@ -212,7 +217,7 @@
   <header class="hero">
     <div class="eyebrow reveal">董可人 AI 课程 · 内容变现指南</div>
     <h1 class="reveal" data-delay="60">AI <em>副业</em>赛道</h1>
-    <p class="sub reveal" data-delay="120">不打工，用 AI 做<b>短剧、短视频、小说</b>三条内容赛道变现。门槛低、起步快，已经有人用对方法跑出了成绩——跟对方法，你也能分一杯羹。</p>
+    <p class="sub reveal" data-delay="120">不打工，用 AI 做<b>短剧、短视频、小说、绘画、有声书、数字人</b>六条内容赛道变现。门槛低、起步快，已经有人用对方法跑出了成绩——跟对方法，你也能分一杯羹。</p>
     <div class="rule reveal" data-delay="160"></div>
     <div class="stats">
       <div class="stat reveal" data-delay="200"><b><em data-count="400" data-suffix=" 亿">0 亿</em></b><span>2026 AI 短剧市场规模（预计）</span></div>
@@ -275,6 +280,11 @@
         </div>
       </div>
       <div class="t-warn"><b>赢家打法：</b>制作成本降了九成，省下的钱别全砸投流——走「系列 IP 化 + 剧场账号」，稳定分账靠系列，不靠单剧暴富。</div>
+      <div class="ladder">
+        <div class="lad"><b>起步</b><span>做 1 条 30 秒片段，投抖音 / 红果测完播与付费</span></div>
+        <div class="lad"><b>起量</b><span>系列 IP 化 + 剧场账号，稳定更新攒分账</span></div>
+        <div class="lad"><b>放大</b><span>平台分账 + 出海 + 广告商单</span></div>
+      </div>
     </section>
 
     <!-- 02 AI 短视频 -->
@@ -330,6 +340,11 @@
         </div>
       </div>
       <div class="t-warn"><b>变现关键：</b>播放分成只是起点，尽早从「流量」转向「IP / 带货 / 商单」——同样一条视频，挂对变现路径，收入翻几倍。</div>
+      <div class="ladder">
+        <div class="lad"><b>起步</b><span>定垂直选题，日更 1 条连发 7 天看起量</span></div>
+        <div class="lad"><b>起量</b><span>挂带货 CPS / 商单，从流量转向变现</span></div>
+        <div class="lad"><b>放大</b><span>IP 化 + 矩阵账号，多号分发</span></div>
+      </div>
     </section>
 
     <!-- 03 AI 小说 -->
@@ -384,12 +399,197 @@
         </div>
       </div>
       <div class="t-warn"><b>正确姿势：</b>平台要「人工底稿 + 原创度 100%」，那就用「AI 起稿 + 人工打磨」——AI 负责日更万字的扩写，你负责人设和节奏。</div>
+      <div class="ladder">
+        <div class="lad"><b>起步</b><span>AI 写 3 个开头（各 2000 字），投番茄 / 盐选测完读</span></div>
+        <div class="lad"><b>起量</b><span>日更 4000 字冲推荐，攒全勤奖</span></div>
+        <div class="lad"><b>放大</b><span>长篇稳定分成 + 盐选爆款短篇</span></div>
+      </div>
+    </section>
+
+    <!-- 04 AI 绘画 & 设计 -->
+    <section class="track reveal" style="--tc:#c98f8f">
+      <div class="t-head">
+        <span class="t-no">04</span>
+        <div class="t-title">
+          <h2>AI 绘画 & 设计</h2>
+          <div class="t-tag">AI 生成头像 / 壁纸 / 电商主图，小红书、闲鱼接单</div>
+        </div>
+        <div class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1m0-12.8-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></div>
+      </div>
+      <div class="t-data">
+        <div class="d"><b>95%+</b><span>壁纸号利润率（成本近零）</span></div>
+        <div class="d"><b>1.2–2.5 万</b><span>头像定制月入</span></div>
+        <div class="d"><b>3.8 万</b><span>宝妈 3 个月收益</span></div>
+      </div>
+      <div class="t-cols">
+        <div class="col">
+          <h4>变现方式</h4>
+          <ul>
+            <li><b>头像 / 情侣头像定制</b> — 单张 68–298 元，闲鱼 / 小红书接单</li>
+            <li><b>壁纸 / 素材付费下载</b> — 单款 1.99–9.9 元，成本近零</li>
+            <li><b>电商主图 / 商品图商单</b> — 企业套餐 1980–3980 元 / 月</li>
+            <li><b>小红书笔记付费 + 合集打包</b> — 免费引流 7 成、付费 3 成</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>门槛 · 适合谁</h4>
+          <p>不用会画画，靠「审美 + 提示词 + 交付体验」。适合设计师、宝妈、学生、零基础。</p>
+          <h4 style="margin-top:18px">第一步</h4>
+          <p class="step"><b>定 1 个风格（治愈萌宠 / 古风 / 赛博）</b>，日更 1 条 9 图笔记测数据。</p>
+        </div>
+      </div>
+      <div class="cases">
+        <h4>真实案例 · 点击跳转</h4>
+        <div class="case-grid">
+          <a class="case" href="https://www.cpengx.cn/productivity/m-ai-wallpaper.html" target="_blank" rel="noopener">
+            <b>AI 壁纸号</b>
+            <span>单款壁纸 2 元卖了 3000 份，成本近零、利润率 95%+</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://m.toutiao.com/article/7675385807071265318/" target="_blank" rel="noopener">
+            <b>宝妈闲鱼接单月入 1.2 万</b>
+            <span>单人头像 68、情侣 128、宠物拟人 88，日接 5–10 单</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://m.toutiao.com/article/7616723621231034932/" target="_blank" rel="noopener">
+            <b>程序员宝妈 3 个月 3.8 万</b>
+            <span>小红书 3.3 万粉，定制头像 99 元、模板包 39 元</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+      </div>
+      <div class="t-warn"><b>正确姿势：</b>纯出图单价被压到 50 元，值钱的是「风格辨识度 + 交付体验」；别用明星 / 知名 IP 形象商用。</div>
+      <div class="ladder">
+        <div class="lad"><b>起步</b><span>定风格 + 日更 9 图笔记</span></div>
+        <div class="lad"><b>起量</b><span>笔记付费 + 闲鱼接单</span></div>
+        <div class="lad"><b>放大</b><span>头像定制 + 电商主图商单</span></div>
+      </div>
+    </section>
+
+    <!-- 05 AI 有声书 & 配音 -->
+    <section class="track reveal" style="--tc:#8fa8b5">
+      <div class="t-head">
+        <span class="t-no">05</span>
+        <div class="t-title">
+          <h2>AI 有声书 & 配音</h2>
+          <div class="t-tag">AI 克隆声音 + TTS，录公版书 / 有声书多平台分发</div>
+        </div>
+        <div class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+      </div>
+      <div class="t-data">
+        <div class="d"><b>50 本</b><span>被裁播音员 3 个月录制量</span></div>
+        <div class="d"><b>3 秒</b><span>豆包 TTS 克隆声音耗时</span></div>
+        <div class="d"><b>5000–1.2 万</b><span>月收入区间</span></div>
+      </div>
+      <div class="t-cols">
+        <div class="col">
+          <h4>变现方式</h4>
+          <ul>
+            <li><b>平台广告分成</b> — 有人听就有分成，长尾「睡后收入」</li>
+            <li><b>付费专辑 / 会员分成</b> — 前几集免费，后续 9.9–19.9 元</li>
+            <li><b>商单配音</b> — 5 分钟口播 50–100 元，宣传片客单更高</li>
+            <li><b>声音授权</b> — 把 AI 声音模型按年 / 按量授权收费</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>门槛 · 适合谁</h4>
+          <p>不用好嗓子，克隆自己声音即可。适合喜欢朗读、能坚持日更的人。</p>
+          <h4 style="margin-top:18px">第一步</h4>
+          <p class="step"><b>克隆声音 + 录 1 本公版书</b>，传喜马拉雅 / 番茄畅听测播放。</p>
+        </div>
+      </div>
+      <div class="cases">
+        <h4>真实案例 · 点击跳转</h4>
+        <div class="case-grid">
+          <a class="case" href="https://m.toutiao.com/article/7659048602353844745/" target="_blank" rel="noopener">
+            <b>被裁播音员 AI 克隆月入过万</b>
+            <span>克隆自己声音录有声书，3 个月录 50 本书，闷声月入过万</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://www.toutiao.com/article/7644008821039350272/" target="_blank" rel="noopener">
+            <b>豆包 TTS 3 秒克隆月入 5000+</b>
+            <span>3 秒样本克隆声音做有声书，副业月入 5000+</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://www.toutiao.com/article/7632273567937233443/" target="_blank" rel="noopener">
+            <b>AI 配音有声书月赚 5000</b>
+            <span>第一本短篇被推荐，一个月 20 多万播放，广告 + 会员到手 5000+</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+      </div>
+      <div class="t-warn"><b>正确姿势：</b>只录公版书或授权文本，声音样本必须用自己原声，别克隆名人声音做商用。</div>
+      <div class="ladder">
+        <div class="lad"><b>起步</b><span>克隆声音 + 录公版书</span></div>
+        <div class="lad"><b>起量</b><span>多平台分发（喜马 / 番茄 / 懒人）</span></div>
+        <div class="lad"><b>放大</b><span>付费专辑 + 商单 + 声音授权</span></div>
+      </div>
+    </section>
+
+    <!-- 06 AI 数字人 & 口播 -->
+    <section class="track reveal" style="--tc:#a894c9">
+      <div class="t-head">
+        <span class="t-no">06</span>
+        <div class="t-title">
+          <h2>AI 数字人 & 口播</h2>
+          <div class="t-tag">AI 数字人带货直播 + 口播视频，24 小时替你播</div>
+        </div>
+        <div class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="9" r="3"/><path d="M8 16c.8 2 2.2 3 4 3s3.2-1 4-3"/></svg></div>
+      </div>
+      <div class="t-data">
+        <div class="d"><b>千万美元</b><span>武汉公司跨境年销</span></div>
+        <div class="d"><b>1000 万+</b><span>抖音 AI 女装单月卖货</span></div>
+        <div class="d"><b>399 元/月</b><span>国产数字人平台月费</span></div>
+      </div>
+      <div class="t-cols">
+        <div class="col">
+          <h4>变现方式</h4>
+          <ul>
+            <li><b>数字人直播带货</b> — 24 小时播，填补真人空档时段</li>
+            <li><b>AIGC 带货视频</b> — 低粉矩阵账号，佣金 10–20% 分成</li>
+            <li><b>数字人口播 / 知识付费</b> — 把内容批量做成口播视频</li>
+            <li><b>数字人矩阵搭建服务</b> — 给商家搭矩阵，服务费 + 分成</li>
+          </ul>
+        </div>
+        <div class="col">
+          <h4>门槛 · 适合谁</h4>
+          <p>选低决策门槛的日用品，会磨话术、会选品。适合有供应链 / 懂电商的人。</p>
+          <h4 style="margin-top:18px">第一步</h4>
+          <p class="step"><b>录 1–3 分钟视频 + 语音克隆自己</b>，搭 1 个数字人先跑自然流量。</p>
+        </div>
+      </div>
+      <div class="cases">
+        <h4>真实案例 · 点击跳转</h4>
+        <div class="case-grid">
+          <a class="case" href="https://cjrb.cjn.cn/html/2026-06/23/content_151732_3564849.htm" target="_blank" rel="noopener">
+            <b>武汉 AI 主播跨境卖全球</b>
+            <span>帮 200+ 商家跨境卖货，一年销售额超千万美元</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://m.pedaily.cn/news/563711" target="_blank" rel="noopener">
+            <b>抖音 AI 女装月销千万</b>
+            <span>11 万粉，90 天发 847 条 AI 视频，单月卖货超 1000 万</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+          <a class="case" href="https://sdxw.iqilu.com/share/YS0yMS0xNzIwNDM3Mw==.html" target="_blank" rel="noopener">
+            <b>「羊肚菌书记」数字分身带货</b>
+            <span>AI 数字分身全天直播，日销 8000+，带动村民共富</span>
+            <span class="ext"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></span>
+          </a>
+        </div>
+      </div>
+      <div class="t-warn"><b>正确姿势：</b>数字人当辅助（填凌晨空档），别指望挂机躺赚；选品 + 话术 + 矩阵运营才是关键，平台要求标注 AI 生成。</div>
+      <div class="ladder">
+        <div class="lad"><b>起步</b><span>选品 + 搭 1 个数字人</span></div>
+        <div class="lad"><b>起量</b><span>自然流量跑通 + 磨话术</span></div>
+        <div class="lad"><b>放大</b><span>矩阵账号 + 真人冲高峰</span></div>
+      </div>
     </section>
 
     <!-- 工具箱 -->
     <section class="sec reveal">
       <div class="sec-head">
-        <div class="kicker">04 · AI Toolkit</div>
+        <div class="kicker">07 · AI Toolkit</div>
         <h2>一条赛道配一套工具</h2>
         <p>工具都是现成的，不用从零学。核心是「人做判断，AI 做执行」——选题、节奏、审美由你把关，重复劳动交给 AI。</p>
       </div>
@@ -406,15 +606,27 @@
           <h3>AI 小说</h3>
           <div class="tl"><span>DeepSeek</span><span>豆包</span><span>Claude</span><span>星月写作</span><span>Notion</span></div>
         </div>
+        <div class="tool" style="--tc:#c98f8f">
+          <h3>AI 绘画</h3>
+          <div class="tl"><span>Midjourney</span><span>Stable Diffusion</span><span>即梦</span><span>通义万相</span><span>Canva</span></div>
+        </div>
+        <div class="tool" style="--tc:#8fa8b5">
+          <h3>AI 有声书</h3>
+          <div class="tl"><span>豆包 TTS</span><span>ElevenLabs</span><span>剪映声音克隆</span><span>通义听悟</span><span>讯飞配音</span></div>
+        </div>
+        <div class="tool" style="--tc:#a894c9">
+          <h3>AI 数字人</h3>
+          <div class="tl"><span>硅基智能</span><span>腾讯智影</span><span>D-ID</span><span>蝉镜</span><span>剪映数字人</span></div>
+        </div>
       </div>
     </section>
 
     <!-- 为什么现在入场 -->
     <section class="sec reveal">
       <div class="sec-head">
-        <div class="kicker">05 · Why Now</div>
+        <div class="kicker">08 · Why Now</div>
         <h2>为什么是现在</h2>
-        <p>三条赛道都在红利期：工具把门槛打到地板，平台把流量和补贴放到台面上。早一步学会方法，就早一步分账。</p>
+        <p>六条赛道都在红利期：工具把门槛打到地板，平台把流量和补贴放到台面上。早一步学会方法，就早一步分账。</p>
       </div>
       <div class="tool-grid">
         <div class="tool" style="--tc:#c9a25a">
@@ -435,7 +647,7 @@
     <!-- 7天启动 -->
     <section class="sec reveal">
       <div class="sec-head">
-        <div class="kicker">06 · 7-Day Start</div>
+        <div class="kicker">09 · 7-Day Start</div>
         <h2>新手 7 天启动清单</h2>
         <p>不用准备三个月，先用一周跑通「选题 → 作品 → 数据」的最小闭环。</p>
       </div>
@@ -443,7 +655,7 @@
         <div class="plan-step">
           <div class="p-day">Day 1–2</div>
           <h3>定赛道 + 选工具</h3>
-          <p>三选一，顺手最重要。注册对应 AI 工具，扒 5 个同赛道头部账号，拆它们的选题和开头。</p>
+          <p>六选一，顺手最重要。注册对应 AI 工具，扒 5 个同赛道头部账号，拆它们的选题和开头。</p>
         </div>
         <div class="plan-step">
           <div class="p-day">Day 3–5</div>
@@ -461,12 +673,12 @@
     <!-- 避坑清单 -->
     <section class="sec reveal">
       <div class="sec-head">
-        <div class="kicker">07 · Avoid These</div>
+        <div class="kicker">10 · Avoid These</div>
         <h2>别踩这四个坑</h2>
         <p>大多数新人不是输在能力，而是输在认知偏差。</p>
       </div>
       <div class="myths">
-        <div class="myth"><h3>闭门造车，没人带</h3><p>三条赛道的选题公式、节奏打法、平台红线，自己摸要三个月，跟对系统方法一周就上手。</p></div>
+        <div class="myth"><h3>闭门造车，没人带</h3><p>六条赛道的选题公式、节奏打法、平台红线，自己摸要三个月，跟对系统方法一周就上手。</p></div>
         <div class="myth"><h3>迷信「月入过万」截图</h3><p>卖课海报的截图没法验真，我们只放可点击的公开报道原文，数据你点进去就能核对。</p></div>
         <div class="myth"><h3>纯 AI 生成不修改就发</h3><p>平台要「人工底稿 + 原创度 100%」，正确姿势是 AI 起稿、人工打磨，AI 放大你的准备质量。</p></div>
         <div class="myth"><h3>赌单条爆款</h3><p>稳定的是「系列 IP 化 + 账号化」，方法对了，量变到质变，比押注单条靠谱得多。</p></div>
@@ -475,7 +687,7 @@
 
     <div class="closing reveal">
       <h3>跟对方法，少走三个月弯路</h3>
-      <p>三条赛道的<b style="color:#16120a">选题公式、节奏打法、变现路径</b>，董可人 AI 课程里都拆好了——照着做，第一周就能跑出第一条作品，跑通了再放大。</p>
+      <p>六条赛道的<b style="color:#16120a">选题公式、节奏打法、变现路径</b>，董可人 AI 课程里都拆好了——照着做，第一周就能跑出第一条作品，跑通了再放大。</p>
       <div class="tip">
         <span>① 选赛道 + 学方法</span>
         <span>② 第一天做出作品</span>
@@ -493,7 +705,10 @@
       <a href="https://m.pedaily.cn/news/569569" target="_blank" rel="noopener">投资界 · AI短剧反杀</a> ·
       <a href="https://m.thepaper.cn/newsDetail_forward_33200194" target="_blank" rel="noopener">澎湃 · 最火的 AI 博主在赚钱了吗</a> ·
       <a href="https://m.toutiao.com/w/1867942818768900/" target="_blank" rel="noopener">今日头条 · AI写长篇月入1.2万</a> ·
-      <a href="https://juejin.cn/post/7654804766796349440" target="_blank" rel="noopener">掘金 · AI网文变现指南</a>
+      <a href="https://juejin.cn/post/7654804766796349440" target="_blank" rel="noopener">掘金 · AI网文变现指南</a> ·
+      <a href="https://cjrb.cjn.cn/html/2026-06/23/content_151732_3564849.htm" target="_blank" rel="noopener">长江日报 · AI主播跨境卖全球</a> ·
+      <a href="https://m.toutiao.com/article/7659048602353844745/" target="_blank" rel="noopener">今日头条 · AI有声书月入过万</a> ·
+      <a href="https://www.cpengx.cn/productivity/m-ai-wallpaper.html" target="_blank" rel="noopener">产品新 · AI壁纸号单款2元卖3000份</a>
     </div>
     <div class="disc">说明：收入受题材、平台、运营能力影响，个体差异较大；以上数据与案例均来自 2026 年公开报道，卡片可点击跳转原文核对，请理性判断。<br>平台规则（番茄原创度 100%、盐选人工底稿等）以各平台最新公告为准。</div>
   </footer>
