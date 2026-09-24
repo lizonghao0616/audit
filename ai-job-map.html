@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 岗位地图 · 转岗路径清单</title>
+<style>
+  :root {
+    --bg: #09090b;
+    --bg-2: #0b0d15;
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --faint: #71717a;
+    --line: rgba(255,255,255,.08);
+    --line-strong: rgba(255,255,255,.14);
+    --glass: rgba(255,255,255,.035);
+    --glass-hi: rgba(255,255,255,.06);
+    --accent: #8b5cf6;
+    --accent-2: #22d3ee;
+    --gold: #fbbf24;
+    --cyan: #22d3ee;
+    --violet: #a78bfa;
+    --emerald: #34d399;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== 极光背景 ===== */
+  .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .55; will-change: transform; }
+  .orb.o1 { width: 620px; height: 620px; left: -8%; top: -12%; background: radial-gradient(circle, rgba(59,130,246,.20), transparent 65%); animation: drift1 22s ease-in-out infinite alternate; }
+  .orb.o2 { width: 560px; height: 560px; right: -10%; top: 4%; background: radial-gradient(circle, rgba(139,92,246,.20), transparent 65%); animation: drift2 26s ease-in-out infinite alternate; }
+  .orb.o3 { width: 520px; height: 520px; left: 30%; bottom: -18%; background: radial-gradient(circle, rgba(34,211,238,.16), transparent 65%); animation: drift3 30s ease-in-out infinite alternate; }
+  .orb.o4 { width: 460px; height: 460px; right: 24%; bottom: 6%; background: radial-gradient(circle, rgba(244,114,182,.12), transparent 65%); animation: drift1 24s ease-in-out infinite alternate-reverse; }
+  @keyframes drift1 { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(60px,40px,0) scale(1.12); } }
+  @keyframes drift2 { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(-70px,50px,0) scale(1.08); } }
+  @keyframes drift3 { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(40px,-60px,0) scale(1.15); } }
+
+  /* 星尘画布 */
+  #nebula { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+  /* 噪点 */
+  .noise { position: fixed; inset: 0; z-index: 2; pointer-events: none; opacity: .035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* ===== 导航 ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px; transition: background .3s ease, border-color .3s ease, backdrop-filter .3s ease;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled { background: rgba(9,9,11,.72); backdrop-filter: blur(18px) saturate(160%); border-bottom-color: var(--line); }
+  .logo { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+  .logo span { background: linear-gradient(100deg, #7dd3fc, #a78bfa); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 13.5px; transition: color .2s ease; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ===== 主体 ===== */
+  main { position: relative; z-index: 3; max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+
+  /* ===== Hero ===== */
+  .hero { min-height: 92vh; display: flex; flex-direction: column; justify-content: center; padding-top: 80px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+    padding: 7px 16px; border-radius: 999px; font-size: 12.5px; letter-spacing: .5px; color: var(--muted);
+    background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(12px);
+  }
+  .eyebrow i { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); box-shadow: 0 0 10px var(--emerald); animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  h1 {
+    margin-top: 28px; font-size: clamp(44px, 8vw, 92px); font-weight: 800;
+    letter-spacing: -.035em; line-height: 1.04;
+  }
+  h1 .g {
+    background: linear-gradient(105deg, #a78bfa 0%, #818cf8 40%, #22d3ee 90%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    background-size: 200% 100%; animation: shimmer 6s ease-in-out infinite;
+  }
+  @keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+  .hero .sub { margin-top: 22px; font-size: 17px; color: var(--muted); max-width: 560px; }
+  .cta { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
+  .btn {
+    position: relative; display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 26px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer;
+    text-decoration: none; transition: transform .2s var(--ease), box-shadow .2s var(--ease), background .2s ease;
+  }
+  .btn-primary { color: #0a0a0a; background: linear-gradient(100deg, #a78bfa, #818cf8); box-shadow: 0 8px 30px rgba(139,92,246,.30); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(139,92,246,.42); }
+  .btn-ghost { color: var(--text); background: var(--glass); border: 1px solid var(--line-strong); backdrop-filter: blur(12px); }
+  .btn-ghost:hover { background: var(--glass-hi); transform: translateY(-2px); }
+
+  /* 统计 */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 64px; }
+  .stat {
+    padding: 22px 20px; border-radius: 16px; background: var(--glass);
+    border: 1px solid var(--line); backdrop-filter: blur(16px);
+  }
+  .stat b { display: block; font-size: 34px; font-weight: 800; letter-spacing: -.03em; }
+  .stat b em { font-style: normal; background: linear-gradient(100deg, #a78bfa, #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .stat span { font-size: 12.5px; color: var(--muted); letter-spacing: .3px; }
+
+  /* ===== 区块通用 ===== */
+  section { padding: 120px 0 0; }
+  .sec-head { margin-bottom: 40px; }
+  .sec-kicker { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; color: var(--accent-2); text-transform: uppercase; }
+  .sec-head h2 { margin-top: 12px; font-size: clamp(30px, 4.5vw, 44px); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; }
+  .sec-head p { margin-top: 14px; font-size: 15px; color: var(--muted); max-width: 640px; }
+
+  /* ===== 岗位地图：Bento ===== */
+  .map-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .layer-card {
+    position: relative; padding: 28px 28px 22px; border-radius: 20px; overflow: hidden;
+    background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(18px) saturate(160%);
+    transition: transform .35s var(--ease), border-color .3s ease, box-shadow .35s ease;
+  }
+  .layer-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--lc, var(--accent)); opacity: .85;
+  }
+  .layer-card::after {
+    content: ""; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, var(--lc, var(--accent)), transparent 70%); opacity: .08; pointer-events: none;
+  }
+  .layer-card:hover { transform: translateY(-4px); border-color: var(--line-strong); box-shadow: 0 24px 60px rgba(0,0,0,.45); }
+  .layer-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .layer-head .name { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  .layer-head .note { font-size: 12px; color: var(--muted); }
+  .job-row {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 14px;
+    padding: 14px 0; border-top: 1px solid var(--line);
+  }
+  .job-row:first-of-type { border-top: none; padding-top: 0; }
+  .job-row .j-name { font-size: 15px; font-weight: 600; }
+  .job-row .j-en { font-size: 11.5px; color: var(--faint); margin-top: 2px; letter-spacing: .2px; }
+  .job-row .j-skills { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+  .pay {
+    flex-shrink: 0; padding: 4px 10px; border-radius: 8px; font-size: 12.5px; font-weight: 700;
+    background: rgba(251,191,36,.12); color: var(--gold); white-space: nowrap;
+  }
+  .real-inline { font-size: 12px; color: var(--faint); margin-top: 6px; }
+  .real-inline b { color: var(--emerald); font-weight: 600; }
+
+  /* ===== 真实在招表格 ===== */
+  .table-card { border-radius: 20px; overflow: hidden; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(18px); }
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px; }
+  thead th {
+    text-align: left; padding: 16px 20px; color: var(--muted); font-weight: 600; font-size: 11.5px;
+    letter-spacing: 1.2px; text-transform: uppercase; border-bottom: 1px solid var(--line); white-space: nowrap;
+    background: rgba(255,255,255,.02);
+  }
+  tbody td { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,.05); color: #d4d4d8; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr { transition: background .18s ease; }
+  tbody tr:hover { background: rgba(255,255,255,.03); }
+  td.role-cell { font-weight: 600; color: var(--text); white-space: nowrap; }
+  td.pay { color: var(--gold); font-weight: 700; white-space: nowrap; }
+  td.city { color: var(--muted); white-space: nowrap; }
+  .tag { display: inline-block; padding: 3px 9px; border-radius: 6px; font-size: 11px; background: rgba(167,139,250,.14); color: #d8ccff; white-space: nowrap; }
+  td a.co-link { color: #9fc4f0; text-decoration: none; border-bottom: 1px dashed rgba(159,196,240,.35); white-space: nowrap; transition: color .18s ease, border-color .18s ease; }
+  td a.co-link:hover { color: #cde8ff; border-bottom-color: #cde8ff; }
+  td a.co-link .arr { display: inline-block; margin-left: 4px; opacity: .6; line-height: 1; vertical-align: -1px; }
+  td a.co-link .arr svg { display: block; }
+  .real-inline a { color: var(--emerald); text-decoration: none; border-bottom: 1px dashed rgba(52,211,153,.35); transition: color .18s ease, border-color .18s ease; }
+  .real-inline a:hover { color: #7bf0c4; border-bottom-color: #7bf0c4; }
+
+  /* ===== 转岗路径 ===== */
+  .path-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .path-card {
+    position: relative; padding: 24px 24px 20px; border-radius: 18px; overflow: hidden;
+    background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(16px);
+    transition: transform .35s var(--ease), border-color .3s ease;
+  }
+  .path-card:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .path-card .p-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .path-card .p-flow { font-size: 15.5px; font-weight: 700; letter-spacing: -.01em; }
+  .path-card .p-flow .arrow { color: var(--accent-2); margin: 0 7px; font-weight: 400; }
+  .stars { color: var(--gold); font-size: 13px; letter-spacing: 1.5px; white-space: nowrap; }
+  .p-rows { margin-top: 14px; font-size: 13px; }
+  .p-rows .r { margin-top: 7px; color: #c4c4cc; }
+  .p-rows .r b { color: var(--violet); font-weight: 600; }
+  .p-step { margin-top: 14px; padding: 12px 14px; border-radius: 10px; font-size: 12.5px; color: #cfe4ea;
+    background: rgba(34,211,238,.07); border-left: 2px solid var(--cyan); }
+  .p-step b { color: var(--cyan); }
+  .p-warn { margin-top: 10px; padding: 10px 13px; border-radius: 10px; font-size: 12px; color: #f0dcae;
+    background: rgba(251,191,36,.06); border-left: 2px solid var(--gold); }
+  .p-warn b { color: var(--gold); }
+
+  /* ===== 30 天 ===== */
+  .week-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .week {
+    padding: 24px 22px; border-radius: 16px; background: var(--glass); border: 1px solid var(--line);
+    backdrop-filter: blur(14px); position: relative; overflow: hidden;
+    transition: transform .3s var(--ease);
+  }
+  .week:hover { transform: translateY(-3px); }
+  .week .w-no { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--accent-2); }
+  .week h4 { font-size: 15.5px; margin-top: 8px; }
+  .week p { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+
+  /* ===== 为什么可行 ===== */
+  .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .why-item { padding: 26px 24px; border-radius: 18px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(16px); }
+  .why-item .w-ico { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    background: var(--glass); border: 1px solid var(--line); color: var(--violet); margin-bottom: 14px; }
+  .why-item .w-ico svg { width: 21px; height: 21px; display: block; }
+  .why-item h4 { font-size: 16px; margin-top: 12px; }
+  .why-item p { font-size: 13px; color: var(--muted); margin-top: 9px; }
+
+  /* ===== Footer ===== */
+  footer { margin: 140px 0 60px; padding-top: 32px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+  footer .src { line-height: 2.2; }
+  footer a { color: #9fb4d8; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+  footer .disc { margin-top: 14px; color: var(--faint); font-size: 11.5px; line-height: 1.8; }
+
+  /* ===== 进场动画 ===== */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 860px) {
+    .map-grid, .path-grid, .why-grid { grid-template-columns: 1fr; }
+    .week-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { display: none; }
+    main { padding: 0 20px; }
+  }
+  @media (max-width: 520px) {
+    .week-grid { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="aurora">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
+</div>
+<canvas id="nebula"></canvas>
+<div class="noise"></div>
+
+<nav id="nav">
+  <div class="logo"><span>AI 岗位地图</span> · 转岗路径</div>
+  <div class="nav-links">
+    <a href="#map">岗位地图</a>
+    <a href="#jobs">真实在招</a>
+    <a href="#paths">转岗路径</a>
+    <a href="#plan">起步计划</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="eyebrow reveal"><i></i>2026 求职 · 转群福利资料</div>
+    <h1 class="reveal" data-delay="80">AI 岗位地图<br><span class="g">转岗路径清单</span></h1>
+    <p class="sub reveal" data-delay="160">真实在招数据拆解 10 类岗位 + 8 条转岗路径，附 30 天起步清单——让「转行 AI」从口号变成可执行的第一步。</p>
+    <div class="cta reveal" data-delay="240">
+      <a href="#map" class="btn btn-primary magnetic">查看岗位地图 →</a>
+      <a href="#paths" class="btn btn-ghost magnetic">转岗路径清单</a>
+    </div>
+    <div class="stats">
+      <div class="stat reveal" data-delay="320"><b><em data-count="486" data-suffix="%">0%</em></b><span>Prompt 岗位同比增长（猎聘）</span></div>
+      <div class="stat reveal" data-delay="380"><b><em data-count="34.3" data-suffix="万">0万</em></b><span>提示词/AI训练岗平均年薪</span></div>
+      <div class="stat reveal" data-delay="440"><b><em data-count="10" data-suffix="类">0类</em></b><span>可切入的岗位方向</span></div>
+      <div class="stat reveal" data-delay="500"><b><em data-count="8" data-suffix="条">0条</em></b><span>已验证的转岗路径</span></div>
+    </div>
+  </section>
+
+  <!-- 岗位地图 -->
+  <section id="map">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">01 · Job Map</div>
+      <h2>AI 岗位地图</h2>
+      <p>按「技术 → 产品 → 运营 → 数据」四层拆解，薪资为该方向 2026 公开在招区间。转岗建议从「应用开发 / 运营 / Prompt」等友好岗位切入。</p>
+    </div>
+    <div class="map-grid">
+      <div class="layer-card reveal" style="--lc:#22d3ee">
+        <div class="layer-head"><div class="name">技术研发层</div><div class="note">写代码 · 高薪高门槛</div></div>
+        <div class="job-row"><div><div class="j-name">大模型应用开发工程师</div><div class="j-en">LLM Application Engineer</div><div class="j-skills">Python · RAG / Agent / 微调 · LangChain / Dify</div><div class="real-inline">在招：<a href="https://www.mashibing.com/job/6035" target="_blank" rel="noopener">码士</a> 30-45K · 金证 15-25K</div></div><span class="pay">应届 10-20K<br>3-5年 30-45K</span></div>
+        <div class="job-row"><div><div class="j-name">AI Agent 开发工程师</div><div class="j-en">Agent Engineer</div><div class="j-skills">规划 / 记忆 / 工具调用 · MCP · 多 Agent</div><div class="real-inline">在招：<a href="https://career.hebut.edu.cn/correcruit/content/id/78986.html" target="_blank" rel="noopener">拼多多</a>(50人) · <a href="https://career.fudan.edu.cn/Zhaopin/zhiweiDetail.html?jobtype=1&id=52aa023b-4640-489e-89d4-c24966f4afd1" target="_blank" rel="noopener">彩讯</a> 25-40万+期权</div></div><span class="pay">10-40K<br>+ 期权</span></div>
+        <div class="job-row"><div><div class="j-name">大模型算法 / 研究员</div><div class="j-en">LLM Algorithm</div><div class="j-skills">预训练 · SFT / LoRA / RLHF · PyTorch</div><div class="real-inline">硕士 + 科班为主，<b>不建议零基础硬啃</b></div></div><span class="pay">30-80万/年</span></div>
+        <div class="job-row"><div><div class="j-name">数据 / MLOps 工程师</div><div class="j-en">Data / MLOps</div><div class="j-skills">数据管道 · 向量库 · vLLM / Docker / K8s</div><div class="real-inline">工程背景的<b>稳妥跳板</b></div></div><span class="pay">15-35K</span></div>
+      </div>
+      <div class="layer-card reveal" data-delay="80" style="--lc:#a78bfa">
+        <div class="layer-head"><div class="name">产品层</div><div class="note">懂业务 + 懂 AI 边界 · 文科可入</div></div>
+        <div class="job-row"><div><div class="j-name">AI 产品经理</div><div class="j-en">AI Product Manager</div><div class="j-skills">PRD · 理解 RAG/Agent 边界 · Prompt</div><div class="real-inline">在招：<a href="https://career.fudan.edu.cn/Zhaopin/zhiweiDetail.html?jobtype=1&id=b6fc751e-50e5-59f4-053c-76fe81c9e15f" target="_blank" rel="noopener">长亭</a> 20-40K · <a href="https://employment.jiangsu.smartedu.cn/recruitment/jobDetails?zpgwid=1000000000731995&dwid=731539" target="_blank" rel="noopener">Shopee</a> 30万/年</div></div><span class="pay">10.5-40K</span></div>
+        <div class="job-row"><div><div class="j-name">AI 解决方案架构师 / 售前</div><div class="j-en">Solution Architect</div><div class="j-skills">行业场景 × 技术方案 × 落地闭环</div><div class="real-inline">适合有行业经验的<b>销售/售前/顾问</b></div></div><span class="pay">20-50K</span></div>
+      </div>
+      <div class="layer-card reveal" data-delay="160" style="--lc:#fbbf24">
+        <div class="layer-head"><div class="name">运营层</div><div class="note">落地 + 数据 + 内容 · 门槛友好</div></div>
+        <div class="job-row"><div><div class="j-name">AI / 大模型运营</div><div class="j-en">LLM Operations</div><div class="j-skills">模型路由 / 成本 · Prompt 调优 · 风控</div><div class="real-inline">在招：<a href="https://www.liepin.com/job/1985308899.shtml" target="_blank" rel="noopener">字节</a> 25-40K·15薪 · <a href="https://www.mashibing.com/job/6244" target="_blank" rel="noopener">面壁</a> 25-35K</div></div><span class="pay">校招 8-12K<br>3-5年 25-40K</span></div>
+        <div class="job-row"><div><div class="j-name">Prompt 工程师 / AI 训练师</div><div class="j-en">Prompt Engineer</div><div class="j-skills">Few-shot / CoT / ReAct · 多模型选型</div><div class="real-inline">文科友好：语言 + 逻辑比代码更重要</div></div><span class="pay">15-60K</span></div>
+      </div>
+      <div class="layer-card reveal" data-delay="240" style="--lc:#34d399">
+        <div class="layer-head"><div class="name">内容 / 数据层</div><div class="note">入门 · 转行第一块敲门砖</div></div>
+        <div class="job-row"><div><div class="j-name">数据标注 / AI 训练师</div><div class="j-en">Data Annotation</div><div class="j-skills">标注 + 质检 · 标注员→组长→主管</div><div class="real-inline">入行跳板，<b>别停留超过 1 年</b></div></div><span class="pay">2.5-10K</span></div>
+        <div class="job-row"><div><div class="j-name">AI 内容运营 / AIGC 创作</div><div class="j-en">AI Content</div><div class="j-skills">文案 / 视频 × AI 工具 · 审美</div><div class="real-inline">内容 / 新媒体背景<b>转型最顺</b></div></div><span class="pay">8-20K</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 真实在招 -->
+  <section id="jobs">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">02 · Real Openings</div>
+      <h2>真实在招速览</h2>
+      <p>来自高校就业平台 / 招聘网站 2026 年公开信息，点击公司名可跳转招聘原文，投递时以企业最新为准。</p>
+    </div>
+    <div class="table-card reveal">
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>岗位</th><th>公司</th><th>薪资</th><th>城市</th><th>看点</th></tr></thead>
+          <tbody>
+            <tr><td class="role-cell">大模型应用开发</td><td><a class="co-link" href="https://www.mashibing.com/job/6035" target="_blank" rel="noopener">码士集团<span class="arr"></span></a></td><td class="pay">30–45K</td><td class="city">北京</td><td><span class="tag">3–5 年经验</span></td></tr>
+            <tr><td class="role-cell">AI Agent 研发</td><td><a class="co-link" href="https://career.hebut.edu.cn/correcruit/content/id/78986.html" target="_blank" rel="noopener">拼多多<span class="arr"></span></a></td><td class="pay">10K+</td><td class="city">上海</td><td><span class="tag">本科 · 招 50 人</span></td></tr>
+            <tr><td class="role-cell">AI Agent 开发</td><td><a class="co-link" href="https://career.fudan.edu.cn/Zhaopin/zhiweiDetail.html?jobtype=1&id=52aa023b-4640-489e-89d4-c24966f4afd1" target="_blank" rel="noopener">彩讯科技<span class="arr"></span></a></td><td class="pay">25–40 万 + 期权</td><td class="city">京/穗/深</td><td><span class="tag">本科可投</span></td></tr>
+            <tr><td class="role-cell">Agent 研发</td><td><a class="co-link" href="https://career.nankai.edu.cn/correcruit/content/id/116574.html" target="_blank" rel="noopener">清昴智能<span class="arr"></span></a></td><td class="pay">12–20K</td><td class="city">北京</td><td><span class="tag">自研 Agent 框架</span></td></tr>
+            <tr><td class="role-cell">AI 产品经理</td><td><a class="co-link" href="https://career.fudan.edu.cn/Zhaopin/zhiweiDetail.html?jobtype=1&id=b6fc751e-50e5-59f4-053c-76fe81c9e15f" target="_blank" rel="noopener">长亭未来<span class="arr"></span></a></td><td class="pay">20–40K</td><td class="city">北京/杭州</td><td><span class="tag">本科及以上</span></td></tr>
+            <tr><td class="role-cell">AI 产品经理（管培）</td><td><a class="co-link" href="https://employment.jiangsu.smartedu.cn/recruitment/jobDetails?zpgwid=1000000000731995&dwid=731539" target="_blank" rel="noopener">Shopee<span class="arr"></span></a></td><td class="pay">30 万/年</td><td class="city">北京</td><td><span class="tag">招 15 人</span></td></tr>
+            <tr><td class="role-cell">AI 产品经理</td><td><a class="co-link" href="https://career.fudan.edu.cn/Zhaopin/zhiweiDetail.html?jobtype=1&id=52aa023b-4640-489e-89d4-c24966f4afd1" target="_blank" rel="noopener">彩讯科技<span class="arr"></span></a></td><td class="pay">12–20K</td><td class="city">多城</td><td><span class="tag">不限经验</span></td></tr>
+            <tr><td class="role-cell">大模型运营</td><td><a class="co-link" href="https://www.liepin.com/job/1985308899.shtml" target="_blank" rel="noopener">字节跳动<span class="arr"></span></a></td><td class="pay">25–40K·15 薪</td><td class="city">北京</td><td><span class="tag">3–5 年</span></td></tr>
+            <tr><td class="role-cell">AI 运营工程师</td><td><a class="co-link" href="https://www.mashibing.com/job/6244" target="_blank" rel="noopener">面壁智能<span class="arr"></span></a></td><td class="pay">25–35K</td><td class="city">北京</td><td><span class="tag">1–3 年</span></td></tr>
+            <tr><td class="role-cell">AIGC 提示词工程师</td><td><a class="co-link" href="https://zrc-sme.chinasme.cn/job/6986851efc45f41049084fd7" target="_blank" rel="noopener">掌阅科技<span class="arr"></span></a></td><td class="pay">1.5–2.5 万 × 14 薪</td><td class="city">北京</td><td><span class="tag">文科友好</span></td></tr>
+            <tr><td class="role-cell">AI Agent 开发</td><td><a class="co-link" href="https://career.nankai.edu.cn/correcruit/content/id/117965.html" target="_blank" rel="noopener">神州数码<span class="arr"></span></a></td><td class="pay">20K+</td><td class="city">北京</td><td><span class="tag">硕士</span></td></tr>
+            <tr><td class="role-cell">大模型运营（校招）</td><td><a class="co-link" href="https://league.rc114.com/Union/Position?jobId=CB46075B-53D0-4598-94D4-004A3E8D85EB" target="_blank" rel="noopener">萌想科技<span class="arr"></span></a></td><td class="pay">8–12K</td><td class="city">成都</td><td><span class="tag">应届可投</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 转岗路径 -->
+  <section id="paths">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">03 · Transition Paths</div>
+      <h2>转岗路径清单</h2>
+      <p>8 条路径按可行性排序，每条都给出「第一步行动」——可行性 = 技能可迁移度 × 岗位缺口。</p>
+    </div>
+    <div class="path-grid">
+      <div class="path-card reveal">
+        <div class="p-top"><div class="p-flow">后端 / 全栈 <span class="arrow">→</span> 大模型应用 / Agent 开发</div><div class="stars">★★★★★</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：编程、工程、API、数据库、部署全都有</div><div class="r"><b>需补齐</b>：LLM 原理 + RAG/Agent + Prompt + 框架</div><div class="r"><b>周期</b>：3–6 个月</div></div>
+        <div class="p-step"><b>第一步</b>：复现 1 个 RAG 知识库 demo + 1 个 Agent demo，开源到 GitHub</div>
+        <div class="p-warn"><b>避坑</b>：别只刷 LangChain 教程——面试看的是「能跑通、能讲清架构」的项目，不是课程证书。</div>
+      </div>
+      <div class="path-card reveal" data-delay="60">
+        <div class="p-top"><div class="p-flow">产品经理 <span class="arrow">→</span> AI 产品经理</div><div class="stars">★★★★★</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：需求、PRD、竞品、数据分析</div><div class="r"><b>需补齐</b>：大模型能力边界 + Prompt</div><div class="r"><b>周期</b>：2–3 个月</div></div>
+        <div class="p-step"><b>第一步</b>：写 1 份大模型产品 PRD + 用 Coze 搭 1 个智能体</div>
+        <div class="p-warn"><b>避坑</b>：别把 Prompt 当「万能话术」——核心竞争力是能说清模型能力的边界与失败场景。</div>
+      </div>
+      <div class="path-card reveal" data-delay="120">
+        <div class="p-top"><div class="p-flow">前端 / 客户端 <span class="arrow">→</span> AI 应用开发</div><div class="stars">★★★★☆</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：交互、组件、工程化</div><div class="r"><b>需补齐</b>：Python + API 调用 + Agent 编排</div><div class="r"><b>周期</b>：3–6 个月</div></div>
+        <div class="p-step"><b>第一步</b>：做 1 个接入 Agent 的对话式前端作品</div>
+        <div class="p-warn"><b>避坑</b>：别纠结「要不要补算法」——先用 Python 把 API 调用 + 流式输出跑通，算法不是入场券。</div>
+      </div>
+      <div class="path-card reveal" data-delay="180">
+        <div class="p-top"><div class="p-flow">运营 / 市场 <span class="arrow">→</span> AI 运营</div><div class="stars">★★★★☆</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：数据指标、内容、用户、项目推进</div><div class="r"><b>需补齐</b>：模型路由/成本 + Prompt 调优</div><div class="r"><b>周期</b>：2–3 个月</div></div>
+        <div class="p-step"><b>第一步</b>：拆解 1 个模型的用量/成本指标，写 Prompt 调优复盘</div>
+        <div class="p-warn"><b>避坑</b>：别停留在「会用 AI 工具」——能算清单次调用的成本和 ROI，才是运营岗的护城河。</div>
+      </div>
+      <div class="path-card reveal" data-delay="240">
+        <div class="p-top"><div class="p-flow">销售 / 售前 <span class="arrow">→</span> AI 售前 / 解决方案</div><div class="stars">★★★★☆</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：行业理解、沟通、方案、PPT</div><div class="r"><b>需补齐</b>：技术方案边界 + 落地案例</div><div class="r"><b>周期</b>：2–3 个月</div></div>
+        <div class="p-step"><b>第一步</b>：梳理 1 个行业的 AI 落地方案 PPT + 3 个案例</div>
+        <div class="p-warn"><b>避坑</b>：别把「AI 什么都能干」讲成吹牛——能给出能力边界和真实案例的售前才值钱。</div>
+      </div>
+      <div class="path-card reveal" data-delay="300">
+        <div class="p-top"><div class="p-flow">测试 / QA <span class="arrow">→</span> AI Agent 开发（评测）</div><div class="stars">★★★★☆</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：用例设计、质量意识、自动化</div><div class="r"><b>需补齐</b>：大模型评测体系 + Benchmark</div><div class="r"><b>周期</b>：2–4 个月</div></div>
+        <div class="p-step"><b>第一步</b>：给 1 个 Agent 写评测用例集 + 自动化脚本</div>
+        <div class="p-warn"><b>避坑</b>：别只做「能跑通」的一次性测试——可复用的评测集 + 指标，才是你的差异化作品。</div>
+      </div>
+      <div class="path-card reveal" data-delay="360">
+        <div class="p-top"><div class="p-flow">数据分析 <span class="arrow">→</span> 数据工程 / 评测</div><div class="stars">★★★☆☆</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：SQL、Python、统计</div><div class="r"><b>需补齐</b>：数据管道 + 向量库 + 评测集</div><div class="r"><b>周期</b>：3–6 个月</div></div>
+        <div class="p-step"><b>第一步</b>：构建 1 个评测数据集 + 跑通评测流程</div>
+        <div class="p-warn"><b>避坑</b>：别只在 SQL 上原地打转——向量库 + 评测流程，才是转岗后的新增量。</div>
+      </div>
+      <div class="path-card reveal" data-delay="420">
+        <div class="p-top"><div class="p-flow">零基础 / 文科 <span class="arrow">→</span> Prompt 工程师 → 进阶</div><div class="stars">★★★☆☆</div></div>
+        <div class="p-rows"><div class="r"><b>迁移点</b>：语言表达、逻辑、领域知识</div><div class="r"><b>需补齐</b>：Prompt 范式 + AI 工具 + 作品集</div><div class="r"><b>周期</b>：30 天起步</div></div>
+        <div class="p-step"><b>第一步</b>：30 天实操攒作品集（作品集比简历更重要）</div>
+        <div class="p-warn"><b>避坑</b>：别背提示词模板——面试官看的是「同一需求下你如何迭代出更好结果」的思考过程。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 30 天 -->
+  <section id="plan">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">04 · 30-Day Plan</div>
+      <h2>30 天起步清单</h2>
+      <p>不管走哪条路径，前 4 周都能落地的动作。</p>
+    </div>
+    <div class="week-grid">
+      <div class="week reveal"><div class="w-no">WEEK 1</div><h4>定岗 + 摸 JD</h4><p>选定 1 个目标岗位，扒 10 条真实 JD 提炼共同要求，注册 Dify / Coze 搭出第一个智能体。</p></div>
+      <div class="week reveal" data-delay="80"><div class="w-no">WEEK 2</div><h4>补 1 个核心技能</h4><p>技术岗补 Python，非技术岗补 Prompt 范式。复现 1 个 RAG demo 或写 10 组高质量 Prompt。</p></div>
+      <div class="week reveal" data-delay="160"><div class="w-no">WEEK 3</div><h4>做一个完整作品</h4><p>做 1 个能演示的 Agent 小项目（知识库问答 / 自动摘要 / 客服），并写复盘文档。</p></div>
+      <div class="week reveal" data-delay="240"><div class="w-no">WEEK 4</div><h4>作品集 + 投递</h4><p>打磨作品集（附链接），改写简历突出「项目 + 数据」，投递时把作品链接贴进简历。</p></div>
+    </div>
+  </section>
+
+  <!-- 为什么可行 -->
+  <section id="why">
+    <div class="sec-head reveal">
+      <div class="sec-kicker">05 · Why It Works</div>
+      <h2>为什么「转岗可行」</h2>
+      <p>不是画饼，三条判断依据。</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-item reveal"><div class="w-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg></div><h4>看作品，不唯学历</h4><p>大量 JD 把「项目经验 / 作品集 / GitHub 开源」列为优先项，甚至高于学历。一个能跑起来的 Agent 比一纸证书更有说服力。</p></div>
+      <div class="why-item reveal" data-delay="80"><div class="w-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.98.98 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.02.968a2.5 2.5 0 1 1-3.237-3.237c.464-.18.894-.527.967-1.02a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.402 2.402 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.23 8.77c.24-.24.581-.353.917-.303.515.077.877.528 1.073 1.01a2.5 2.5 0 1 0 3.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402 2.402 0 0 1 12 1.998c.617 0 1.234.236 1.704.706l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.02-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.18-.894.527-.967 1.02Z"/></svg></div><h4>原行业 = 差异化优势</h4><p>AI 落地难在「懂业务」而非「懂算法」。转岗者带着原行业理解入场，正是复合型人才的溢价来源。</p></div>
+      <div class="why-item reveal" data-delay="160"><div class="w-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><h4>工具门槛已大幅降低</h4><p>Dify、Coze 等低代码平台让「不写代码也能搭 Agent」成为可能，入行不再需要先啃完深度学习和高数。</p></div>
+    </div>
+  </section>
+
+  <footer class="reveal">
+    <div class="src">
+      数据来源（2026 年公开招聘信息汇总，具体以企业最新发布为准）：
+      <a href="https://www.mashibing.com/job/6035" target="_blank" rel="noopener">码士集团</a> ·
+      <a href="https://career.hebut.edu.cn/correcruit/content/id/78986.html" target="_blank" rel="noopener">拼多多</a> ·
+      <a href="https://career.fudan.edu.cn/Zhaopin/zhiweiDetail.html?jobtype=1&id=52aa023b-4640-489e-89d4-c24966f4afd1" target="_blank" rel="noopener">彩讯科技</a> ·
+      <a href="https://career.nankai.edu.cn/correcruit/content/id/116574.html" target="_blank" rel="noopener">清昴智能</a> ·
+      <a href="https://career.fudan.edu.cn/Zhaopin/zhiweiDetail.html?jobtype=1&id=b6fc751e-50e5-59f4-053c-76fe81c9e15f" target="_blank" rel="noopener">长亭未来</a> ·
+      <a href="https://employment.jiangsu.smartedu.cn/recruitment/jobDetails?zpgwid=1000000000731995&dwid=731539" target="_blank" rel="noopener">Shopee</a> ·
+      <a href="https://www.liepin.com/job/1985308899.shtml" target="_blank" rel="noopener">字节跳动</a> ·
+      <a href="https://www.mashibing.com/job/6244" target="_blank" rel="noopener">面壁智能</a> ·
+      <a href="https://zrc-sme.chinasme.cn/job/6986851efc45f41049084fd7" target="_blank" rel="noopener">掌阅科技</a> ·
+      <a href="https://career.nankai.edu.cn/correcruit/content/id/117965.html" target="_blank" rel="noopener">神州数码</a> ·
+      <a href="https://league.rc114.com/Union/Position?jobId=CB46075B-53D0-4598-94D4-004A3E8D85EB" target="_blank" rel="noopener">萌想科技</a>
+    </div>
+    <div class="disc">说明：薪资区间来自不同平台与统计口径，受经验 / 城市 / 企业影响差异较大，仅供定位参考，不构成薪资承诺。部分「头部 / 专家岗」门槛较高，转岗建议从「应用开发 / 运营 / Prompt」等友好岗位切入。</div>
+  </footer>
+
+</main>
+
+<script>
+/* ===== 3D 星尘星系背景（真 3D 透视旋转 + 星座连线 + 鼠标视差） ===== */
+(function () {
+  var canvas = document.getElementById('nebula');
+  var ctx = canvas.getContext('2d');
+  var W, H, dpr, cx, cy;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.width = Math.floor(window.innerWidth * dpr);
+    H = canvas.height = Math.floor(window.innerHeight * dpr);
+    cx = W / 2; cy = H / 2;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // 螺旋星系粒子：三条旋臂 + 随机散布
+  var N = Math.min(150, Math.max(80, Math.floor(window.innerWidth * window.innerHeight / 14000)));
+  var cols = ['139,92,246', '34,211,238', '129,140,248', '244,114,182', '125,211,252'];
+  var stars = [];
+  for (var i = 0; i < N; i++) {
+    var arm = Math.floor(Math.random() * 3);
+    var ang = Math.random() * Math.PI * 2 + arm * Math.PI * 2 / 3;
+    var rad = Math.pow(Math.random(), 0.55) * 1.7;
+    var spread = 0.15 + Math.random() * 0.14;
+    var x = Math.cos(ang) * rad + (Math.random() - 0.5) * spread;
+    var y = Math.sin(ang) * rad * 0.62 + (Math.random() - 0.5) * spread;
+    var z = (Math.random() - 0.5) * 1.7;
+    stars.push({
+      x: x, y: y, z: z,
+      c: cols[Math.floor(Math.random() * cols.length)],
+      r: 0.8 + Math.random() * 1.9,
+      tw: Math.random() * Math.PI * 2,
+      tws: 0.5 + Math.random() * 1.4
+    });
+  }
+
+  var rotY = 0, rotX = -0.28;
+  var mx = 0, my = 0;
+  window.addEventListener('mousemove', function (e) {
+    mx = (e.clientX / window.innerWidth - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  var FOV = 4.4;
+
+  function project(p, out) {
+    var cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    var x1 = p.x * cosY - p.z * sinY;
+    var z1 = p.x * sinY + p.z * cosY;
+    var cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+    var y1 = p.y * cosX - z1 * sinX;
+    var z2 = p.y * sinX + z1 * cosX;
+    var s = FOV / (FOV + z2 + 1.2);
+    var k = Math.min(W, H) * 0.34;
+    out.x = cx + x1 * s * k;
+    out.y = cy + y1 * s * k;
+    out.s = s;
+  }
+
+  var proj = [];
+  for (var j = 0; j < N; j++) proj.push({});
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+
+    var tRotY = mx * 0.4;
+    var tRotX = -0.28 + my * 0.22;
+    rotY += (tRotY - rotY) * 0.045 + 0.0018;
+    rotX += (tRotX - rotX) * 0.045;
+
+    var minDim = Math.min(W, H);
+
+    for (var i = 0; i < N; i++) {
+      stars[i].tw += 0.018 * stars[i].tws;
+      project(stars[i], proj[i]);
+    }
+
+    // 星座连线（近邻 3D 距离）
+    ctx.lineWidth = 1;
+    var maxd = minDim * 0.115;
+    var maxd2 = maxd * maxd;
+    for (var a = 0; a < N; a++) {
+      for (var b = a + 1; b < N; b++) {
+        var pa = proj[a], pb = proj[b];
+        var dx = pa.x - pb.x, dy = pa.y - pb.y;
+        var dist2 = dx * dx + dy * dy;
+        if (dist2 < maxd2) {
+          var d = Math.sqrt(dist2);
+          var alpha = (1 - d / maxd) * 0.20 * ((pa.s + pb.s) * 0.5);
+          ctx.strokeStyle = 'rgba(165,155,255,' + alpha.toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.moveTo(pa.x, pa.y);
+          ctx.lineTo(pb.x, pb.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // 发光粒子
+    for (var q = 0; q < N; q++) {
+      var pr = proj[q];
+      var st = stars[q];
+      var depth = Math.max(0.15, Math.min(1, pr.s));
+      var twinkle = 0.72 + 0.28 * Math.sin(st.tw);
+      var alpha = 0.30 + 0.55 * depth * twinkle;
+      var rr = st.r * depth * dpr * 1.5;
+      var g = ctx.createRadialGradient(pr.x, pr.y, 0, pr.x, pr.y, rr * 3.2);
+      g.addColorStop(0, 'rgba(' + st.c + ',' + alpha.toFixed(3) + ')');
+      g.addColorStop(1, 'rgba(' + st.c + ',0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(pr.x, pr.y, rr * 3.2, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ===== 滚动进场 ===== */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { els.forEach(function (e) { e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) {
+        var d = en.target.getAttribute('data-delay') || 0;
+        en.target.style.transitionDelay = d + 'ms';
+        en.target.classList.add('in');
+        io.unobserve(en.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(function (e) { io.observe(e); });
+})();
+
+/* ===== 数字滚动 ===== */
+(function () {
+  var nums = document.querySelectorAll('[data-count]');
+  if (!('IntersectionObserver' in window)) { nums.forEach(function (n) { n.textContent = n.getAttribute('data-count') + n.getAttribute('data-suffix'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      var el = en.target, target = parseFloat(el.getAttribute('data-count'));
+      var suffix = el.getAttribute('data-suffix') || '';
+      var dec = target % 1 === 0 ? 0 : 1;
+      var t0 = null, dur = 1200;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var k = Math.min(1, (ts - t0) / dur);
+        var e = 1 - Math.pow(1 - k, 3);
+        el.textContent = (target * e).toFixed(dec) + suffix;
+        if (k < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      io.unobserve(el);
+    });
+  }, { threshold: 0.6 });
+  nums.forEach(function (n) { io.observe(n); });
+})();
+
+/* ===== 导航滚动态 ===== */
+(function () {
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function () {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  }, { passive: true });
+})();
+
+/* ===== 磁性按钮（桌面端） ===== */
+(function () {
+  if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) return;
+  document.querySelectorAll('.magnetic').forEach(function (btn) {
+    btn.addEventListener('mousemove', function (e) {
+      var r = btn.getBoundingClientRect();
+      var x = (e.clientX - r.left - r.width / 2) * 0.18;
+      var y = (e.clientY - r.top - r.height / 2) * 0.18;
+      btn.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    });
+    btn.addEventListener('mouseleave', function () {
+      btn.style.transform = '';
+    });
+  });
+})();
+
+/* ===== 链接可靠跳转（兼容 webview / 预览环境） ===== */
+(function () {
+  var NAV_OFFSET = 78;
+  function goHash(href) {
+    var id = href.slice(1);
+    if (!id) return;
+    var el = document.getElementById(id) || document.querySelector('a[name="' + id + '"]');
+    if (!el) return;
+    var top = el.getBoundingClientRect().top + window.pageYOffset - NAV_OFFSET;
+    try {
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    } catch (err) {
+      window.scrollTo(0, Math.max(0, top));
+    }
+    if (history.replaceState) {
+      try { history.replaceState(null, '', href); } catch (e2) {}
+    }
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (href.charAt(0) === '#') {
+      // 页内锚点：JS 平滑滚动
+      e.preventDefault();
+      goHash(href);
+    } else if (href && /^https?:\/\//i.test(href)) {
+      // 外部链接：优先新窗口，被拦截则当前页跳转
+      e.preventDefault();
+      var opened = false;
+      try { opened = window.open(href, '_blank'); } catch (err) {}
+      if (!opened) { window.location.href = href; }
+    }
+  });
+})();
+
+/* ===== 外链 SVG 图标注入 ===== */
+(function () {
+  var ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+  document.querySelectorAll('.arr').forEach(function (s) { s.innerHTML = ICON; });
+})();
+</script>
+</body>
+</html>
